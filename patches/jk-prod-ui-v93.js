@@ -66,16 +66,7 @@ function simplifyHome(){
   const ordered=[hero,way,intent,people].filter(Boolean);
   const keep=new Set(ordered);
 
-  [...root.children].forEach(el=>{
-    const hide=!keep.has(el);
-    if(hide){
-      if(el.dataset.jk93Hidden!=='1')el.dataset.jk93Hidden='1';
-      if(el.style.display!=='none')el.style.display='none';
-    }else{
-      if(el.dataset.jk93Hidden)delete el.dataset.jk93Hidden;
-      if(el.style.display==='none')el.style.display='';
-    }
-  });
+  [...root.children].forEach(el=>{if(!keep.has(el))el.remove();});
 
   const visible=[...root.children].filter(el=>keep.has(el));
   const wrong=ordered.some((el,i)=>visible[i]!==el);
