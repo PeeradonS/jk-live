@@ -33,3 +33,5 @@
 .jk-v77-lazy-art{opacity:.04;transition:opacity .16s ease}
 .jk-v77-lazy-art.jk107-loaded{opacity:1}
 @media(prefers-reduced-motion:reduce){.jk-v77-lazy-art{transition:none!important}}
+
+.jk105-artwait{display:inline-flex;align-items:center;height:25px;border-radius:999px;padding:0 8px;font-size:10px;font-weight:900;background:#f2edf0;color:#75676c}
