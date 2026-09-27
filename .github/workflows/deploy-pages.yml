@@ -60,14 +60,14 @@ jobs:
               ('jk-live-ux-v91.css', '<link rel="stylesheet" href="./patches/jk-live-ux-v91.css">'),
               ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
               ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
-              ('jk-sticker-picker-v104.css', '<link rel="stylesheet" href="./patches/jk-sticker-picker-v104.css?v=104.0">'),
+              ('jk-sticker-picker-v104.css', '<link rel="stylesheet" href="./patches/jk-sticker-picker-v104.css?v=104.1">'),
           ]
           body_assets = [
               ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
               ('jk-recovery-v90.js', '<script src="./patches/jk-recovery-v90.js"></script>'),
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
-              ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.0"></script>'),
+              ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.1"></script>'),
           ]
 
           for key, tag in head_assets:
