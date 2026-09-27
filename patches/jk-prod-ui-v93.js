@@ -1,5 +1,6 @@
 (()=>{if(window.JK_PROD_UI_V93)return;window.JK_PROD_UI_V93=1;
 const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelectorAll(s)];
+const setText=(el,t)=>{if(el&&el.textContent!==t)el.textContent=t};
 document.documentElement.dataset.jkUi='v93';
 
 function labelNav(){
@@ -8,12 +9,13 @@ function labelNav(){
   const btns=qa('.nav-btn',nav).slice(0,5);
   if(btns.length<5)return;
   btns.forEach((b,i)=>{
-    b.dataset.route=spec[i][0];
-    const direct=[...b.children].find(x=>x.tagName==='SPAN' && !x.querySelector('svg'));
-    if(direct) direct.textContent=spec[i][1];
-    b.setAttribute('aria-label',spec[i][1]);
+    if(b.dataset.route!==spec[i][0]) b.dataset.route=spec[i][0];
+    const direct=[...b.children].find(x=>x.tagName==='SPAN'&&!x.querySelector('svg'));
+    setText(direct,spec[i][1]);
+    if(b.getAttribute('aria-label')!==spec[i][1]) b.setAttribute('aria-label',spec[i][1]);
   });
 }
+
 function makeIntent(root,anchor){
   let box=q('#jkIntent93',root);
   if(!box){
@@ -27,39 +29,72 @@ function makeIntent(root,anchor){
       if(key==='now'){q('[data-social-mode="now"]',root)?.click();return;}
       const target=q('[data-social-mode="'+key+'"]',root);
       if(target){target.click();return;}
-      const nav=q('.nav-btn[data-route="people"]');nav?.click();
+      q('.nav-btn[data-route="people"]')?.click();
     });
   }
   return box;
 }
+
 function simplifyHome(){
   const root=q('#page[data-route="discover"]'); if(!root)return;
   const hero=q('.jk-city-hero',root),way=q('.jk-way-section',root);
   if(!hero||!way)return;
-  const small=q('.jk-city-hero-copy small',hero),h=q('.jk-city-hero-copy h1',hero),p=q('.jk-city-hero-copy p',hero);
-  if(small)small.textContent='● ออนไลน์ตอนนี้';
-  if(h)h.textContent='คืนนี้อยากคุยกับใครสักคนไหม?';
-  if(p)p.textContent='เลือกคนใกล้ ๆ หรือให้ JK พาคุณไปเจอคนที่พร้อมคุยตอนนี้';
-  const wh=q('.jk-home-heading h2',way);if(wh)wh.textContent='เริ่มคุยแบบไหนดี';
+
+  setText(q('.jk-city-hero-copy small',hero),'● ออนไลน์ตอนนี้');
+  setText(q('.jk-city-hero-copy h1',hero),'คืนนี้อยากคุยกับใครสักคนไหม?');
+  setText(q('.jk-city-hero-copy p',hero),'เลือกคนใกล้ ๆ หรือให้ JK พาคุณไปเจอคนที่พร้อมคุยตอนนี้');
+  setText(q('.jk-home-heading h2',way),'เริ่มคุยแบบไหนดี');
+
   const modes=qa('.jk-random-mode-v27',way);
   [['ส่งแชท','random_text'],['สุ่มเสียง','random_voice'],['สุ่มวิดีโอ','random_video']].forEach((x,i)=>{
-    const b=modes[i];if(!b)return;const t=q('b',b);if(t)t.textContent=x[0];b.dataset.socialMode=x[1];
+    const b=modes[i]; if(!b)return;
+    setText(q('b',b),x[0]);
+    if(b.dataset.socialMode!==x[1]) b.dataset.socialMode=x[1];
   });
-  const choose=q('.jk-choose-self-v27',way);if(choose){const b=q('b',choose);if(b)b.textContent='เลือกคนใกล้ฉัน';}
+
+  const choose=q('.jk-choose-self-v27',way);
+  if(choose) setText(q('b',choose),'เลือกคนใกล้ฉัน');
+
   const intent=makeIntent(root,way);
-  let people=qa('.jk-home-section',root).find(x=>q('.jk-people-rail',x) && x!==intent);
-  if(people){people.id='jkPeople93';const hh=q('.jk-home-heading h2',people);if(hh)hh.textContent='คนแถวนี้';const ss=q('.jk-home-heading small',people);if(ss)ss.textContent='ออนไลน์ก่อน · แตะเพื่อดูโปรไฟล์';}
-  const keep=new Set([hero,way,intent,people].filter(Boolean));
+  let people=qa('.jk-home-section',root).find(x=>q('.jk-people-rail',x)&&x!==intent);
+  if(people){
+    if(people.id!=='jkPeople93')people.id='jkPeople93';
+    setText(q('.jk-home-heading h2',people),'คนแถวนี้');
+    setText(q('.jk-home-heading small',people),'ออนไลน์ก่อน · แตะเพื่อดูโปรไฟล์');
+  }
+
+  const ordered=[hero,way,intent,people].filter(Boolean);
+  const keep=new Set(ordered);
+
   [...root.children].forEach(el=>{
-    if(keep.has(el))el.removeAttribute('data-jk93-hidden');
-    else el.dataset.jk93Hidden='1';
+    const hide=!keep.has(el);
+    if(hide){
+      if(el.dataset.jk93Hidden!=='1')el.dataset.jk93Hidden='1';
+      if(el.style.display!=='none')el.style.display='none';
+    }else{
+      if(el.dataset.jk93Hidden)delete el.dataset.jk93Hidden;
+      if(el.style.display==='none')el.style.display='';
+    }
   });
-  [...root.children].forEach(el=>{if(el.dataset.jk93Hidden==='1')el.style.display='none';else el.style.display='';});
-  [hero,way,intent,people].filter(Boolean).forEach(el=>root.appendChild(el));
+
+  const visible=[...root.children].filter(el=>keep.has(el));
+  const wrong=ordered.some((el,i)=>visible[i]!==el);
+  if(wrong) ordered.forEach(el=>root.appendChild(el));
 }
-function run(){document.documentElement.dataset.jkUi='v93';labelNav();simplifyHome();
- const s=q('#expressionBtnV28');if(s){s.innerHTML='☺';s.setAttribute('aria-label','สติ๊กเกอร์');s.title='สติ๊กเกอร์';}
+
+function run(){
+  if(document.documentElement.dataset.jkUi!=='v93')document.documentElement.dataset.jkUi='v93';
+  labelNav();simplifyHome();
+  const s=q('#expressionBtnV28');
+  if(s){
+    if(s.textContent!=='☺')s.textContent='☺';
+    if(s.getAttribute('aria-label')!=='สติ๊กเกอร์')s.setAttribute('aria-label','สติ๊กเกอร์');
+    if(s.title!=='สติ๊กเกอร์')s.title='สติ๊กเกอร์';
+  }
 }
-new MutationObserver(()=>queueMicrotask(run)).observe(document.documentElement,{childList:true,subtree:true});
-document.addEventListener('DOMContentLoaded',run);setTimeout(run,80);setTimeout(run,400);setTimeout(run,1200);
+let queued=false;
+const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;run()})};
+new MutationObserver(schedule).observe(document.documentElement,{childList:true,subtree:true});
+document.addEventListener('DOMContentLoaded',run);
+setTimeout(run,80);setTimeout(run,400);setTimeout(run,1200);
 })();
