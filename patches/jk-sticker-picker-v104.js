@@ -164,6 +164,8 @@ const QA_RUN=(()=>{
   return p.get('pickerQaRun')==='1'||p.get('pickerQa104')==='1';
 })();
 let qaRan=false;
+const QA_STEP5=new URLSearchParams(location.search).get('pickerQaStep5')==='1';
+let qaStep5Ran=false;
 function showQa(result){
   let el=q('#jk104QaStatus');
   if(!el){
@@ -229,6 +231,64 @@ async function runQa(){
     ' · v77(pack='+!!d.packFound+',item='+!!d.itemFound+',owned='+!!d.owned+',active='+!!d.activeMatch+',result='+!!d.result+')';
 }
 
+
+async function runStep5Qa(){
+  if(!QA_STEP5||qaStep5Ran)return;
+  const a=api();
+  if(!a)return;
+  qaStep5Ran=true;
+  const snapshot={
+    recent:localStorage.getItem(RECENT_KEY),
+    fav:localStorage.getItem(FAV_KEY),
+    usage:localStorage.getItem(USAGE_KEY)
+  };
+  const result={pass:false,favorite:false,usage:false,recent:false};
+  try{
+    const packs=await a.getCatalog();
+    catalog=Array.isArray(packs)?packs:[];
+    const pack=catalog.find(owned)||catalog[0];
+    const item=pack?.items?.[0];
+    if(!pack||!item)throw new Error('no_sticker');
+    const k=id(pack.pack_id,item.sticker_key);
+
+    writeList(RECENT_KEY,[]);
+    writeList(FAV_KEY,[]);
+    localStorage.setItem(USAGE_KEY,'{}');
+
+    toggleFav(pack.pack_id,item.sticker_key);
+    result.favorite=isFav(pack.pack_id,item.sticker_key)&&favorites()[0]===k;
+
+    remember(pack.pack_id,item.sticker_key);
+    remember(pack.pack_id,item.sticker_key);
+    result.recent=recent()[0]===k;
+    result.usage=Number(usage()[k]||0)===2;
+    result.key=k;
+    result.pass=result.favorite&&result.usage&&result.recent;
+  }catch(err){
+    result.error=String(err?.message||err);
+  }finally{
+    if(snapshot.recent===null)localStorage.removeItem(RECENT_KEY);else localStorage.setItem(RECENT_KEY,snapshot.recent);
+    if(snapshot.fav===null)localStorage.removeItem(FAV_KEY);else localStorage.setItem(FAV_KEY,snapshot.fav);
+    if(snapshot.usage===null)localStorage.removeItem(USAGE_KEY);else localStorage.setItem(USAGE_KEY,snapshot.usage);
+  }
+
+  window.JK_STICKER_PICKER_V104_STEP5_QA=result;
+  let el=q('#jk104QaStatus');
+  if(!el){
+    el=document.createElement('div');
+    el.id='jk104QaStatus';
+    el.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';
+    document.body.appendChild(el);
+  }
+  el.style.background=result.pass?'#e9f8ee':'#fff0f0';
+  el.style.color=result.pass?'#176b36':'#9b1c1c';
+  el.dataset.result=result.pass?'pass':'fail';
+  el.dataset.qa=JSON.stringify(result);
+  el.textContent=result.pass
+    ? 'JK STICKER STEP 5 · PASS · favorite + usage + recent'
+    : 'JK STICKER STEP 5 · FAIL · fav='+result.favorite+' usage='+result.usage+' recent='+result.recent;
+}
+
 function styleTrigger(){
   const b=q('#expressionBtnV28');if(!b)return;b.classList.add('jk104-trigger');
   b.setAttribute('aria-label','สติ๊กเกอร์');b.setAttribute('title','สติ๊กเกอร์');
@@ -242,8 +302,8 @@ document.addEventListener('click',e=>{
   e.preventDefault();e.stopImmediatePropagation();open();
 },true);
 let queued=false;
-const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger();runQa()})};
+const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger();runQa();runStep5Qa()})};
 new MutationObserver(hydrate).observe(document.documentElement,{childList:true,subtree:true});
-document.addEventListener('DOMContentLoaded',()=>{styleTrigger();runQa()});setTimeout(()=>{styleTrigger();runQa()},150);setTimeout(()=>{styleTrigger();runQa()},700);setTimeout(runQa,1400);
-window.JKStickerPickerV104={open,close,toggleFav,favorites,recent,usage,runQa};
+document.addEventListener('DOMContentLoaded',()=>{styleTrigger();runQa();runStep5Qa()});setTimeout(()=>{styleTrigger();runQa();runStep5Qa()},150);setTimeout(()=>{styleTrigger();runQa();runStep5Qa()},700);setTimeout(runQa,1400);setTimeout(runStep5Qa,1400);
+window.JKStickerPickerV104={open,close,toggleFav,favorites,recent,usage,runQa,runStep5Qa};
 })();
