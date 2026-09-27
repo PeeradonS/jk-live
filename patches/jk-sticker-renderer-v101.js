@@ -71,13 +71,37 @@ function upgradeWrap(wrap){
   legacy.classList.add('jk-sticker-host-v101');
 }
 
+
+async function runDataQa(){
+  if(!DATA_QA_MODE)return;
+  if(sessionStorage.getItem('jk_sticker_data_qa_v102')==='reloaded')return;
+  const bridge=window.JKStickerBridgeV77;
+  const match=bridge?.activeMatch?.();
+  if(!bridge?.send||!match)return;
+  if(sessionStorage.getItem('jk_sticker_data_qa_v102')==='sending')return;
+  sessionStorage.setItem('jk_sticker_data_qa_v102','sending');
+  const ok=await bridge.send(
+    {pack_id:'v62_31'},
+    {sticker_key:'v65_v62_31_01',caption_th:'หวัดดีครับ'}
+  );
+  if(!ok){
+    sessionStorage.removeItem('jk_sticker_data_qa_v102');
+    return;
+  }
+  sessionStorage.setItem('jk_sticker_data_qa_v102','reloaded');
+  setTimeout(()=>location.reload(),220);
+}
+
 function scan(){
   injectQaFixture();
+  runDataQa();
   qa('.bubble-wrap').forEach(upgradeWrap);
 }
 
 
-const QA_MODE=new URLSearchParams(location.search).get('stickerQa')==='1';
+const params=new URLSearchParams(location.search);
+const QA_MODE=params.get('stickerQa')==='1';
+const DATA_QA_MODE=params.get('stickerDataQa')==='1';
 function injectQaFixture(){
   if(!QA_MODE)return;
   const list=q('#messageList');if(!list||list.dataset.jkStickerQaV101==='1')return;
