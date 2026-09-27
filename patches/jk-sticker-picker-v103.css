@@ -1,0 +1,38 @@
+/* JK Sticker Picker v103 — isolated bottom sheet */
+.jk103-trigger{
+  display:grid!important;place-items:center!important;width:42px!important;min-width:42px!important;height:42px!important;
+  padding:0!important;border:1px solid #eedde1!important;border-radius:14px!important;background:#fff7f9!important;color:#c91f3b!important;
+}
+.jk103-trigger svg{display:block!important;width:22px!important;height:22px!important}
+.jk103-trigger:active{transform:scale(.95)}
+.jk103-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(29,18,22,.30);display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+.jk103-sheet{width:min(100%,560px);height:min(68svh,660px);background:#fff;border-radius:28px 28px 0 0;box-shadow:0 -18px 54px rgba(47,21,30,.15);display:flex;flex-direction:column;overflow:hidden;padding-bottom:env(safe-area-inset-bottom)}
+.jk103-handle{width:42px;height:5px;border-radius:99px;background:#ddd4d7;margin:8px auto 4px;flex:none}
+.jk103-head{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 10px;border-bottom:1px solid #f0e7e9}
+.jk103-head small{display:block;font-size:9px;letter-spacing:.08em;font-weight:900;color:#c91f3b}.jk103-head h3{font-size:19px;margin:2px 0 0;color:#24191d}
+.jk103-close{width:42px;height:42px;border:0;border-radius:14px;background:#f8f3f5;color:#55474c;font-size:22px}
+.jk103-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:9px 12px 5px}
+.jk103-tabs button{height:40px;border:0;border-radius:13px;background:transparent;color:#8b7e82;font-weight:850;font-size:12px}
+.jk103-tabs button.active{background:#fff0f4;color:#c91f3b}
+.jk103-packs{flex:none;border-bottom:1px solid #f3ecee}
+.jk103-packrail{display:flex;gap:7px;overflow:auto;padding:8px 14px;scrollbar-width:none}.jk103-packrail::-webkit-scrollbar{display:none}
+.jk103-pack{flex:0 0 44px;width:44px;height:44px;padding:2px;border-radius:14px;border:1px solid #eadfe2;background:#fff;display:grid;place-items:center;overflow:hidden}
+.jk103-pack.active{border:2px solid #c91f3b;background:#fff5f7}.jk103-pack img{width:100%;height:100%;object-fit:contain}
+.jk103-body{flex:1;min-height:0;overflow:auto;padding:12px 13px 22px;overscroll-behavior:contain}
+.jk103-title{display:flex;align-items:end;justify-content:space-between;margin:1px 2px 10px}.jk103-title b{display:block;font-size:14px;color:#24191d}.jk103-title small{display:block;margin-top:2px;font-size:10px;color:#918489}
+.jk103-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 5px}
+.jk103-sticker{position:relative;min-width:0;aspect-ratio:1/1.08;border:0;border-radius:18px;background:transparent;padding:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
+.jk103-sticker:active{transform:scale(.92);background:#fff4f6}.jk103-sticker.sending{opacity:.45}.jk103-sticker.sent{background:#edf9f1}
+.jk103-sticker img{width:100%;height:calc(100% - 18px);object-fit:contain;filter:drop-shadow(0 3px 4px rgba(45,23,31,.05))}
+.jk103-sticker>span{display:block;width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font-size:9px;color:#7f7176;margin-top:1px}
+.jk103-empty{padding:46px 18px;text-align:center;color:#8b7d82;font-size:12px;line-height:1.7}
+.jk103-storehead{border-radius:20px;background:linear-gradient(135deg,#321b23,#851f39 64%,#cb2443);color:#fff;padding:15px 16px;margin-bottom:12px}
+.jk103-storehead small{display:block;font-size:9px;letter-spacing:.08em;font-weight:900;opacity:.76}.jk103-storehead b{display:block;font-size:17px;margin-top:2px}.jk103-storehead span{display:block;font-size:10px;opacity:.8;margin-top:4px}
+.jk103-storegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.jk103-storecard{min-width:0;text-align:left;border:1px solid #eadfe2;border-radius:19px;background:#fff;padding:9px;color:#24191d}
+.jk103-cover{height:100px;border-radius:14px;background:#faf6f7;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:7px}
+.jk103-cover img{width:76px;height:88px;object-fit:contain;margin:0 -13px}.jk103-cover img+img{transform:translateY(-5px)}
+.jk103-storecard>b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.jk103-storecard>small{display:block;font-size:9px;color:#93858a;margin-top:2px}.jk103-storecard>strong{display:block;font-size:11px;color:#c91f3b;margin-top:6px}
+.jk103-fallback{font-weight:1000;color:#c91f3b}
+@media(max-width:380px){.jk103-sheet{height:min(72svh,650px)}.jk103-grid{gap:5px 3px}.jk103-body{padding-inline:9px}}
+@media(prefers-reduced-motion:reduce){.jk103-trigger,.jk103-sticker{transition:none!important}}
