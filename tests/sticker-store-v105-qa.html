@@ -24,9 +24,10 @@ const restoredCatalog=[
   makePack('qa_paid','ชุดพรีเมียม','pets',true,4900)
 ];
 window.__JK_QA_PURCHASE_CALLS=0;
+const qaPaymentReady=new URLSearchParams(location.search).get('paymentRouteOff')!=='1';
 window.JKStickerV77={
-  get paymentReady(){ return true; },
-  get paymentStatus(){ return {platform:'web',provider:'qa_provider',ready:true}; },
+  get paymentReady(){ return qaPaymentReady; },
+  get paymentStatus(){ return {platform:'web',provider:qaPaymentReady?'qa_provider':'web_payment',ready:qaPaymentReady}; },
   getCatalog:async()=>initialCatalog.map(p=>({...p,items:p.items.map(i=>({...i}))})),
   loadCatalog:async(force=false)=>(force?restoredCatalog:initialCatalog).map(p=>({...p,items:p.items.map(i=>({...i}))})),
   isOwned:p=>!!p.owned||Number(p.amount_minor||0)===0,
