@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JK Sticker STEP 10 Performance QA</title>
+<link rel="stylesheet" href="../patches/jk-sticker-store-v105.css">
+</head>
+<body>
+<script>
+window.__JK_EAGER_CALLS=0;
+window.__JK_LAZY_MARKUP_CALLS=0;
+window.__JK_ASSET_CALLS=0;
+const transparent='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+const packs=Array.from({length:50},(_,p)=>({
+  pack_id:'pack_'+p,
+  title:'Pack '+(p+1),
+  category:['cute','pets','men','women','daily'][p%5],
+  owned:p<3,
+  amount_minor:p<3?0:4900,
+  items:Array.from({length:24},(_,i)=>({sticker_key:'pack_'+p+'_'+i,caption_th:'คำ '+(i+1)}))
+}));
+window.JKStickerV77={
+  get paymentReady(){return false},
+  get paymentStatus(){return {platform:'web',provider:'',ready:false}},
+  getCatalog:async()=>packs,
+  loadCatalog:async()=>packs,
+  isOwned:p=>!!p.owned||Number(p.amount_minor||0)===0,
+  artMarkup:()=>{window.__JK_EAGER_CALLS++;return '<span>EAGER</span>'},
+  lazyArtMarkup:(key,cls='')=>{
+    window.__JK_LAZY_MARKUP_CALLS++;
+    return '<img class="jk-v77-lazy-art '+cls+'" src="'+transparent+'" data-jk-sticker-lazy-key="'+key+'" data-sticker-key="'+key+'" loading="lazy" decoding="async">';
+  },
+  assetUrlByKey:key=>{
+    window.__JK_ASSET_CALLS++;
+    return 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%2210%22/%3E';
+  }
+};
+window.JKStickerPickerV104={openMinePack:async()=>true};
+window.JKStickerBridgeV77={toast:()=>{}};
+</script>
+<script src="../patches/jk-sticker-performance-v107.js"></script>
+<script src="../patches/jk-sticker-store-v105.js"></script>
+<script>
+(async()=>{
+  if(new URLSearchParams(location.search).get('stickerQaStep10')!=='1')return;
+  await window.JKStickerStoreV105.open();
+  await new Promise(r=>setTimeout(r,250));
+  const initial=document.querySelectorAll('.jk105-card').length;
+  const more=document.querySelector('#jk105More');
+  const firstLazy=document.querySelectorAll('img[data-sticker-key]').length;
+  if(more)more.click();
+  await new Promise(r=>setTimeout(r,500));
+  const after=document.querySelectorAll('.jk105-card').length;
+  const lazyNow=document.querySelectorAll('img[data-sticker-key]').length;
+  const stats=window.JKStickerPerformanceV107?.stats||{};
+  const pass=initial===12&&!!more&&after===24&&window.__JK_EAGER_CALLS===0&&firstLazy===36&&lazyNow===72&&Number(stats.maxActive||0)<=3;
+  const badge=document.createElement('div');
+  badge.id='jkStep10Qa';
+  badge.textContent=pass
+    ?'JK STICKER STEP 10 · PASS · 12-pack batching + deferred art + max 3 concurrent'
+    :'JK STICKER STEP 10 · FAIL · initial='+initial+' after='+after+' eager='+window.__JK_EAGER_CALLS+' lazy='+firstLazy+'/'+lazyNow+' max='+stats.maxActive;
+  document.body.appendChild(badge);
+})();
+</script>
+</body>
+</html>
