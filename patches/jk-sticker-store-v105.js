@@ -32,6 +32,29 @@ function card(p){
     '<div class="jk105-card-copy"><small>'+esc(LABELS[p.category]||p.category||'JK')+'</small><b>'+esc(p.title)+'</b><span>24 ภาพ · คำไทยพร้อมใช้</span><div class="jk105-card-foot">'+status(p)+'<em>ดูชุด ›</em></div></div>'+
   '</button>';
 }
+async function restoreOwnership(){
+  const a=api();
+  if(!a?.loadCatalog)return {ok:false,error:'restore_unavailable'};
+  const btn=q('#jk105Restore',overlay);
+  const before=catalog.filter(isOwned).length;
+  if(btn){btn.disabled=true;btn.textContent='กำลังกู้คืน…'}
+  try{
+    const fresh=await a.loadCatalog(true);
+    catalog=Array.isArray(fresh)?fresh:await a.getCatalog();
+    query='';category='';
+    renderBrowse();
+    const owned=catalog.filter(isOwned).length;
+    const status=q('#jk105RestoreStatus',overlay);
+    if(status)status.textContent='กู้คืนสิทธิ์แล้ว · พบ '+owned+' ชุดในบัญชีนี้';
+    return {ok:true,before,owned};
+  }catch(err){
+    const status=q('#jk105RestoreStatus',overlay);
+    if(status)status.textContent='กู้คืนไม่สำเร็จ ลองใหม่อีกครั้ง';
+    if(btn){btn.disabled=false;btn.textContent='กู้คืนการซื้อ'}
+    return {ok:false,before,owned:before,error:String(err?.message||err)};
+  }
+}
+
 function filtered(){
   const term=query.trim().toLocaleLowerCase('th');
   return catalog.filter(p=>{
@@ -49,12 +72,14 @@ function renderBrowse(){
   const rows=filtered();
   body.innerHTML=
     '<section class="jk105-hero"><small>JK ORIGINAL STICKERS</small><h2>สติ๊กเกอร์ที่อยากหยิบมาใช้จริง</h2><p>'+catalog.length+' ชุด · '+catalog.reduce((n,p)=>n+(p.items?.length||0),0).toLocaleString('th-TH')+' ภาพ · ทุกชุดมีข้อความไทย</p></section>'+
+    '<section class="jk105-account"><div><b>สิทธิ์ผูกกับบัญชี</b><span>เปลี่ยนเครื่องหรือลงแอปใหม่ แพ็กที่ซื้อแล้วกู้คืนได้</span><small id="jk105RestoreStatus" role="status"></small></div><button type="button" id="jk105Restore">กู้คืนการซื้อ</button></section>'+
     '<label class="jk105-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="jk105Search" type="search" inputmode="search" placeholder="ค้นหา เช่น ฝันดี แมว เนิร์ด…" value="'+esc(query)+'"></label>'+
     '<div class="jk105-cats"><button type="button" data-jk105-cat="" class="'+(!category?'active':'')+'">ทั้งหมด</button>'+
       cats.map(c=>'<button type="button" data-jk105-cat="'+esc(c)+'" class="'+(category===c?'active':'')+'">'+esc(LABELS[c]||c)+'</button>').join('')+
     '</div>'+
     '<div class="jk105-resultbar"><b>'+rows.length+' ชุด</b><span>แตะเพื่อดูครบ 24 ภาพ</span></div>'+
     (rows.length?'<div class="jk105-grid">'+rows.map(card).join('')+'</div>':'<div class="jk105-empty">ยังไม่พบชุดที่ตรงกับคำค้น</div>');
+  q('#jk105Restore',body)?.addEventListener('click',restoreOwnership);
   q('#jk105Search',body)?.addEventListener('input',e=>{query=e.target.value;renderBrowse();const i=q('#jk105Search',overlay);i?.focus();if(i)i.setSelectionRange(i.value.length,i.value.length)});
   qa('[data-jk105-cat]',body).forEach(b=>b.onclick=()=>{category=b.dataset.jk105Cat||'';renderBrowse()});
   qa('[data-jk105-pack]',body).forEach(b=>b.onclick=()=>renderDetail(b.dataset.jk105Pack));
@@ -110,8 +135,10 @@ function qaResult(){
     hasPrice:!!q('.jk105-price',body)
   };
 }
-const QA=new URLSearchParams(location.search).get('storeQaStep6')==='1';
-let qaDone=false,qaTries=0;
+const QA_PARAMS=new URLSearchParams(location.search);
+const QA=QA_PARAMS.get('storeQaStep6')==='1';
+const QA7=QA_PARAMS.get('storeQaStep7')==='1';
+let qaDone=false,qaTries=0,qa7Done=false;
 function qaBadge(text,pass=null){
   let badge=q('#jk105QaStatus');
   if(!badge){
@@ -161,9 +188,34 @@ async function runQa(){
     qaDone=true;qaBadge('JK STICKER STEP 6 · FAIL · '+String(err?.message||err),false);
   }
 }
+async function runStep7Qa(){
+  if(!QA7||qa7Done)return;
+  const a=api();
+  if(!a?.getCatalog||!a?.loadCatalog){
+    return setTimeout(runStep7Qa,250);
+  }
+  qa7Done=true;
+  try{
+    if(!overlay)await open();
+    const restoreButton=!!q('#jk105Restore',overlay);
+    const before=catalog.filter(isOwned).length;
+    const result=await restoreOwnership();
+    const after=catalog.filter(isOwned).length;
+    const paidRestored=catalog.some(p=>Number(p.amount_minor||0)>0&&isOwned(p));
+    const pass=restoreButton&&result.ok&&after>before&&paidRestored;
+    window.JK_STICKER_STORE_V105_STEP7_QA={pass,restoreButton,before,after,paidRestored};
+    qaBadge(pass
+      ? 'JK STICKER STEP 7 · PASS · account ownership + restore'
+      : 'JK STICKER STEP 7 · FAIL · button='+restoreButton+' before='+before+' after='+after+' paid='+paidRestored,
+      pass);
+  }catch(err){
+    qaBadge('JK STICKER STEP 7 · FAIL · '+String(err?.message||err),false);
+  }
+}
 if(QA)qaBadge('JK STICKER STEP 6 · CHECKING');
-document.addEventListener('DOMContentLoaded',()=>setTimeout(runQa,120));
-setTimeout(runQa,180);
+if(QA7)qaBadge('JK STICKER STEP 7 · CHECKING');
+document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{runQa();runStep7Qa()},120));
+setTimeout(()=>{runQa();runStep7Qa()},180);
 document.addEventListener('click',e=>{
   const tab=e.target.closest?.('[data-jk104-tab="store"]');
   if(!tab)return;
@@ -172,5 +224,5 @@ document.addEventListener('click',e=>{
   window.JKStickerPickerV104?.close?.();
   open();
 },true);
-window.JKStickerStoreV105={open,close,renderBrowse,renderDetail,runQa};
+window.JKStickerStoreV105={open,close,renderBrowse,renderDetail,restoreOwnership,runQa,runStep7Qa};
 })();
