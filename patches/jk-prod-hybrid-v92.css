@@ -1,0 +1,87 @@
+/* JK Production Hybrid v92
+   Keep the existing production login's clean hierarchy, then apply the same
+   spacing/radius language to the signed-in app without removing features. */
+:root{
+  --jk92-bg:#faf7f8;
+  --jk92-card:#fff;
+  --jk92-ink:#22191c;
+  --jk92-muted:#84767b;
+  --jk92-line:#eadfe2;
+  --jk92-red:#c91f3b;
+  --jk92-grad:linear-gradient(135deg,#ef3b62 0%,#c91f3b 52%,#8d1530 100%);
+  --jk92-shadow:0 12px 30px rgba(73,32,44,.07);
+}
+html,body{background:#eee9eb!important}
+.shell{background:var(--jk92-bg)!important}
+
+/* Preserve the production login strengths */
+.jk-auth-v46{
+  border-radius:30px!important;
+  box-shadow:0 24px 70px rgba(76,31,44,.13)!important;
+}
+.jk-auth-v46 input{
+  min-height:51px!important;
+  border-radius:16px!important;
+  color:var(--jk92-ink)!important;
+  caret-color:var(--jk92-red)!important;
+}
+.jk-auth-v46 button{min-height:50px}
+.jk-auth-v46 input::placeholder{color:#9e9296!important}
+
+/* Signed-in chrome */
+.jk-v17-topbar{box-shadow:0 1px 0 rgba(72,38,47,.04)!important}
+.jk-v17-nav{min-height:74px!important}
+.jk-v17-nav .nav-btn{padding:8px 4px!important}
+
+/* Shared premium surface language */
+.jk-person-peek,
+.jk-choose-self-v27,
+.nearby-person-v43,
+.jk-profile-preview,
+.jk-profile-card,
+.jk-chat-card,
+.jk-story-card,
+.jk-party-card{
+  border-color:var(--jk92-line)!important;
+  box-shadow:var(--jk92-shadow)!important;
+}
+
+/* Home keeps people first and the three core contact modes */
+.jk-city-hero{box-shadow:0 18px 42px rgba(83,28,46,.14)!important}
+.jk-random-mode-v27{min-height:58px!important}
+.jk91-intents button{min-height:42px}
+
+/* Chat input must remain visible in every theme */
+form#composer input,
+form.v17-composer input,
+#messageInput{
+  color:var(--jk92-ink)!important;
+  background:#fff!important;
+  caret-color:var(--jk92-red)!important;
+  font-size:16px!important;
+}
+form#composer input::placeholder,
+form.v17-composer input::placeholder,
+#messageInput::placeholder{color:#a89ca0!important}
+#expressionBtnV28{
+  display:grid!important;
+  place-items:center!important;
+  min-width:42px!important;
+  min-height:42px!important;
+  border-radius:14px!important;
+}
+
+/* Profile media should read as an album, not a single avatar */
+.jk-recovery-public-album-v90,
+.jk-recovery-self-album-v90{
+  border-radius:22px!important;
+  border:1px solid var(--jk92-line)!important;
+  background:#fff!important;
+  box-shadow:var(--jk92-shadow)!important;
+}
+
+/* Touch targets */
+button,[role="button"]{touch-action:manipulation}
+@media(max-width:380px){
+  .jk-v17-nav .nav-btn{font-size:10px!important}
+}
