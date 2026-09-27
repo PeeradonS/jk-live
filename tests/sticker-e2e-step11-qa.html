@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="../">
+<title>JK Sticker STEP 11 E2E QA</title>
+<link rel="stylesheet" href="patches/jk-sticker-renderer-v101.css">
+<style>
+body{font-family:system-ui;margin:0;padding:16px}.message-list{display:flex;flex-direction:column;gap:8px}
+</style>
+</head>
+<body>
+<div id="qaRoot"></div>
+<script>
+const BACKEND='jk_step11_backend_v1';
+localStorage.setItem('jk_v77_sticker_owned_preview',JSON.stringify(['v62_31']));
+localStorage.removeItem(BACKEND);
+const readBackend=()=>{try{return JSON.parse(localStorage.getItem(BACKEND)||'[]')}catch{return[]}};
+const writeBackend=v=>localStorage.setItem(BACKEND,JSON.stringify(v));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+window.JKStickerBridgeV77={
+  preview:true,
+  activeMatch:()=>({id:'qa-room',recipient_id:'account-B'}),
+  toast:()=>{},
+  refresh:()=>{},
+  escape:esc,
+  showModal:()=>{},
+  root:()=>document.body,
+  send:async(pack,item)=>{
+    const rows=readBackend();
+    rows.push({
+      id:'m'+(rows.length+1),
+      sender_id:'account-A',
+      recipient_id:'account-B',
+      message_type:'sticker',
+      sticker_pack:pack.pack_id,
+      sticker_key:item.sticker_key,
+      sticker_text:item.caption_th,
+      body:'[Sticker] '+item.caption_th,
+      created_at:new Date().toISOString()
+    });
+    writeBackend(rows);
+    return true;
+  }
+};
+</script>
+<script src="patches/sticker-v77.js"></script>
+<script src="patches/jk-sticker-renderer-v101.js"></script>
+<script>
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function waitReady(){
+  for(let i=0;i<50;i++){
+    if(window.JKStickerV77?.ready)return true;
+    await sleep(80);
+  }
+  return false;
+}
+function renderAccountB(){
+  const rows=readBackend().filter(x=>x.recipient_id==='account-B');
+  let list=document.querySelector('#messageList');
+  if(list)list.remove();
+  list=document.createElement('div');list.id='messageList';list.className='message-list';
+  rows.filter(x=>x.message_type==='sticker').forEach(m=>{
+    const wrap=document.createElement('div');
+    wrap.className='bubble-wrap them';
+    wrap.dataset.chatMessageV28=m.id;
+    wrap.innerHTML='<div class="jk-sticker-bubble-v28">'+
+      (window.JKStickerV77.artMarkup(m.sticker_key,'qa-receiver')||'<b>'+esc(m.sticker_text)+'</b>')+
+      '</div><span class="bubble-time">21:00</span>';
+    list.appendChild(wrap);
+  });
+  document.querySelector('#qaRoot').appendChild(list);
+}
+async function run(){
+  if(new URLSearchParams(location.search).get('stickerQaStep11')!=='1')return;
+  const ready=await waitReady();
+  let sent1=false,sent2=false;
+  if(ready){
+    sent1=await window.JKStickerV77.sendByKey('v62_31','v65_v62_31_01');
+    sent2=await window.JKStickerV77.sendByKey('v62_02','v65_v62_02_01');
+  }
+  const storedAfterSend=readBackend();
+  renderAccountB();
+  await sleep(350);
+  const wraps1=[...document.querySelectorAll('.bubble-wrap.jk-sticker-message-v101')];
+  const imgs1=[...document.querySelectorAll('#messageList img.jk-sticker-art-v101')];
+  const metaOk=wraps1.length===2&&wraps1.every(w=>w.dataset.stickerKey&&w.dataset.stickerPack);
+  const beforeSrc=imgs1.map(i=>i.src);
+
+  const rows=readBackend();
+  rows.push({
+    id:'reply1',sender_id:'account-B',recipient_id:'account-A',message_type:'text',
+    body:'ได้รับแล้ว',reply_to_id:storedAfterSend[0]?.id||'',reply_preview:storedAfterSend[0]?.sticker_text||'',
+    created_at:new Date().toISOString()
+  });
+  writeBackend(rows);
+  const replyPersisted=readBackend().some(x=>x.id==='reply1'&&x.reply_to_id===storedAfterSend[0]?.id);
+
+  renderAccountB();
+  await sleep(350);
+  const imgs2=[...document.querySelectorAll('#messageList img.jk-sticker-art-v101')];
+  const afterSrc=imgs2.map(i=>i.src);
+  const reloadStable=beforeSrc.length===2&&beforeSrc.every((x,i)=>x===afterSrc[i]);
+
+  let fallbackOk=false;
+  if(imgs2[1]){
+    imgs2[1].src='definitely-missing-step11-'+Date.now()+'.png';
+    await sleep(600);
+    fallbackOk=imgs2[1].dataset.jkStickerFallback==='1'&&String(imgs2[1].src).startsWith('data:image/svg+xml');
+  }
+
+  const differentPacks=storedAfterSend.length===2&&new Set(storedAfterSend.map(x=>x.sticker_pack)).size===2;
+  const pass=ready&&sent1&&sent2&&storedAfterSend.length===2&&differentPacks&&metaOk&&reloadStable&&replyPersisted&&fallbackOk;
+  const badge=document.createElement('div');
+  badge.id='jkStep11Qa';
+  badge.textContent=pass
+    ?'JK STICKER STEP 11 · PASS · A→B + two packs + reload + reply + broken-image fallback'
+    :'JK STICKER STEP 11 · FAIL · ready='+ready+' sent='+sent1+'/'+sent2+' stored='+storedAfterSend.length+' packs='+differentPacks+' meta='+metaOk+' reload='+reloadStable+' reply='+replyPersisted+' fallback='+fallbackOk;
+  document.body.prepend(badge);
+}
+run();
+</script>
+</body>
+</html>
