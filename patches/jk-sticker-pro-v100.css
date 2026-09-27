@@ -1,0 +1,191 @@
+/* JK Sticker Pro v100
+   Presentation-only sticker layer. Does not touch navigation, routes, auth, or data loading. */
+:root{
+  --jksp-brand:#c91f3b;
+  --jksp-ink:#24191d;
+  --jksp-muted:#8b7d82;
+  --jksp-line:#eadfe2;
+  --jksp-soft:#fff3f6;
+  --jksp-card:#fff;
+  --jksp-shadow:0 22px 60px rgba(59,25,36,.16);
+}
+
+/* Chat sticker renderer: artwork floats, never sits in a huge message card. */
+.bubble-wrap.jk-sticker-pro-message{
+  max-width:200px!important;
+  background:transparent!important;
+  padding:0!important;
+  box-shadow:none!important;
+}
+.bubble-wrap.jk-sticker-pro-message .jk-sticker-bubble-v28,
+.bubble-wrap:has(.jk-sticker-image-v62) .jk-sticker-bubble-v60,
+.bubble-wrap:has(.jk-sticker-image-v62) [class*="sticker-bubble"]{
+  width:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:190px!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.bubble-wrap.jk-sticker-pro-message .jk-sticker-bubble-v28>i,
+.bubble-wrap.jk-sticker-pro-message .jk-sticker-bubble-v28>b{display:none!important}
+.jk-sticker-pro-art,
+.bubble-wrap:has(.jk-sticker-image-v62) .jk-sticker-image-v62{
+  display:block!important;
+  width:176px!important;
+  height:176px!important;
+  max-width:44vw!important;
+  max-height:44vw!important;
+  object-fit:contain!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 6px 8px rgba(43,22,30,.07));
+}
+.bubble-wrap.jk-sticker-pro-message.me .bubble-time{margin-right:5px!important}
+.bubble-wrap.jk-sticker-pro-message.them .bubble-time{margin-left:5px!important}
+.bubble-wrap.jk-sticker-pro-message .bubble-time{
+  margin-top:1px!important;
+  font-size:9px!important;
+  color:#a29499!important;
+}
+.bubble-wrap.jk-sticker-pro-message .jk-reaction-stack-v28{margin-top:3px!important}
+
+/* One-tap sticker button. */
+#expressionBtnV28.jk-sticker-pro-trigger{
+  display:grid!important;
+  place-items:center!important;
+  width:42px!important;
+  min-width:42px!important;
+  height:42px!important;
+  padding:0!important;
+  border:1px solid #f0d9df!important;
+  border-radius:14px!important;
+  background:#fff7f9!important;
+  color:var(--jksp-brand)!important;
+  box-shadow:none!important;
+  -webkit-tap-highlight-color:transparent;
+}
+#expressionBtnV28.jk-sticker-pro-trigger svg{width:22px;height:22px;display:block}
+#expressionBtnV28.jk-sticker-pro-trigger:active{transform:scale(.94)}
+
+/* Bottom sheet */
+.jksp-overlay{
+  position:fixed;inset:0;z-index:2147483000;
+  background:rgba(26,16,20,.28);
+  display:flex;align-items:flex-end;justify-content:center;
+  animation:jkspFade .16s ease-out;
+  backdrop-filter:blur(2px);
+}
+.jksp-sheet{
+  width:min(100%,560px);
+  height:min(72svh,690px);
+  background:#fff;
+  border-radius:28px 28px 0 0;
+  box-shadow:var(--jksp-shadow);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  animation:jkspUp .22s cubic-bezier(.2,.8,.2,1);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.jksp-handle{width:42px;height:5px;border-radius:999px;background:#ded6d9;margin:9px auto 5px;flex:0 0 auto}
+.jksp-head{
+  display:flex;align-items:center;gap:12px;
+  padding:8px 16px 12px;border-bottom:1px solid #f0e7e9;
+}
+.jksp-head-copy{flex:1;min-width:0}
+.jksp-head small{display:block;font-size:10px;font-weight:900;letter-spacing:.06em;color:var(--jksp-brand);margin-bottom:2px}
+.jksp-head h3{margin:0;font-size:18px;line-height:1.25;letter-spacing:-.2px;color:var(--jksp-ink)}
+.jksp-close{
+  width:42px;height:42px;border:0;border-radius:14px;background:#f8f3f5;color:#504146;
+  display:grid;place-items:center;font-size:22px;line-height:1;
+}
+.jksp-tabs{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:4px;padding:8px 12px 0;
+}
+.jksp-tabs button{
+  min-height:42px;border:0;border-radius:13px;background:transparent;color:#8d7f84;
+  font-size:12px;font-weight:850;
+}
+.jksp-tabs button.active{background:#fff0f4;color:var(--jksp-brand)}
+.jksp-packbar{
+  display:flex;align-items:center;gap:7px;overflow-x:auto;
+  padding:9px 14px 10px;scrollbar-width:none;border-bottom:1px solid #f4edef;
+}
+.jksp-packbar::-webkit-scrollbar{display:none}
+.jksp-pack{
+  flex:0 0 auto;width:42px;height:42px;border-radius:13px;border:1px solid var(--jksp-line);
+  background:#fff;display:grid;place-items:center;overflow:hidden;padding:2px;position:relative;
+}
+.jksp-pack.active{border:2px solid var(--jksp-brand);background:#fff6f8}
+.jksp-pack img{width:100%;height:100%;object-fit:contain}
+.jksp-pack-store{
+  color:var(--jksp-brand);font-size:20px;font-weight:900;background:#fff5f7!important;
+}
+.jksp-body{flex:1;min-height:0;overflow:auto;padding:12px 14px 22px}
+.jksp-section-head{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:2px 1px 10px}
+.jksp-section-head b{font-size:14px;color:var(--jksp-ink)}
+.jksp-section-head small{font-size:10px;color:var(--jksp-muted)}
+.jksp-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 6px;
+}
+.jksp-sticker{
+  min-width:0;aspect-ratio:1/1.12;border:0;border-radius:18px;background:transparent;
+  display:grid;place-items:center;padding:3px;position:relative;
+  transition:transform .12s ease,background .12s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.jksp-sticker:active{transform:scale(.91);background:#fff2f5}
+.jksp-sticker img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 5px rgba(52,26,34,.06))}
+.jksp-empty{padding:48px 20px;text-align:center;color:var(--jksp-muted);font-size:12px;line-height:1.7}
+
+/* Store */
+.jksp-store-hero{
+  display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#301a22,#8f203c 62%,#cb2443);
+  color:#fff;border-radius:22px;padding:16px;margin-bottom:14px;
+}
+.jksp-store-hero .badge{width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,.15);display:grid;place-items:center;font-weight:1000}
+.jksp-store-hero b{display:block;font-size:16px}.jksp-store-hero small{display:block;font-size:10px;opacity:.8;margin-top:3px;line-height:1.4}
+.jksp-store-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.jksp-store-card{
+  min-width:0;border:1px solid var(--jksp-line);background:#fff;border-radius:20px;padding:10px;text-align:left;color:var(--jksp-ink)
+}
+.jksp-store-cover{
+  height:104px;border-radius:15px;background:#faf6f7;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:8px
+}
+.jksp-store-cover img{width:78px;height:90px;object-fit:contain;margin:0 -14px}
+.jksp-store-cover img:nth-child(2){transform:translateY(-6px);z-index:2}
+.jksp-store-card b{display:block;font-size:12px;line-height:1.4}
+.jksp-store-card small{display:block;color:var(--jksp-muted);font-size:9px;line-height:1.5;margin-top:2px}
+.jksp-store-card strong{display:block;color:var(--jksp-brand);font-size:11px;margin-top:7px}
+.jksp-store-note{margin-top:12px;padding:12px 13px;border-radius:15px;background:#faf6f7;color:#74656a;font-size:10px;line-height:1.6}
+
+/* preview toast */
+.jksp-toast{
+  position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:2147483640;
+  transform:translateX(-50%);background:#24191d;color:#fff;border-radius:999px;
+  padding:10px 14px;font-size:11px;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,.16);
+  animation:jkspToast .18s ease-out;
+}
+
+@keyframes jkspUp{from{transform:translateY(28px);opacity:.3}to{transform:translateY(0);opacity:1}}
+@keyframes jkspFade{from{opacity:0}to{opacity:1}}
+@keyframes jkspToast{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+@media(max-width:390px){
+  .jksp-sheet{height:min(76svh,680px)}
+  .jksp-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .jksp-body{padding-inline:10px}
+  .jksp-store-grid{gap:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  .jksp-overlay,.jksp-sheet,.jksp-toast,.jksp-sticker{animation:none!important;transition:none!important}
+}
