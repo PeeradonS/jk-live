@@ -395,8 +395,20 @@
       await loadCatalog();
       const pack=packs.find(p=>p.pack_id===packId);
       const item=pack?.items?.find(i=>i.sticker_key===stickerKey);
-      if(!pack||!item) return false;
-      return send(pack,item);
+      const diag={
+        packId,stickerKey,
+        ready,
+        packFound:!!pack,
+        itemFound:!!item,
+        owned:!!(pack&&packOwned(pack)),
+        activeMatch:!!bridge.activeMatch?.(),
+        preview:!!bridge.preview
+      };
+      window.JK_STICKER_V77_SEND_DEBUG=diag;
+      if(!pack||!item){diag.result=false;return false;}
+      const result=await send(pack,item);
+      diag.result=!!result;
+      return result;
     },
     openStore,
     openTray,
