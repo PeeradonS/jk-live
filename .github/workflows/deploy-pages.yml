@@ -29,6 +29,7 @@ jobs:
           node --check patches/jk-sticker-interactions-v106.js
           node --check patches/jk-sticker-performance-v107.js
           node --check patches/sticker-v77.js
+          python3 scripts/audit_sticker_rollout.py
 
       - name: Mirror current public JK production
         run: |
@@ -68,7 +69,7 @@ jobs:
               ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
               ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
               ('jk-sticker-picker-v104.css', '<link rel="stylesheet" href="./patches/jk-sticker-picker-v104.css?v=104.5">'),
-              ('jk-sticker-store-v105.css', '<link rel="stylesheet" href="./patches/jk-sticker-store-v105.css?v=105.6">'),
+              ('jk-sticker-store-v105.css', '<link rel="stylesheet" href="./patches/jk-sticker-store-v105.css?v=105.7">'),
           ]
           body_assets = [
               ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
@@ -76,7 +77,7 @@ jobs:
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
               ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.5"></script>'),
-              ('jk-sticker-store-v105.js', '<script src="./patches/jk-sticker-store-v105.js?v=105.6"></script>'),
+              ('jk-sticker-store-v105.js', '<script src="./patches/jk-sticker-store-v105.js?v=105.7"></script>'),
           ]
 
           for key, tag in head_assets:
@@ -90,8 +91,8 @@ jobs:
           # Always normalize Sticker Picker cache versions even when mirrored HTML already contains the tag.
           s = re.sub(r'(jk-sticker-picker-v104\.css)(?:\?v=[^"\']*)?', r'\1?v=104.5', s)
           s = re.sub(r'(jk-sticker-picker-v104\.js)(?:\?v=[^"\']*)?', r'\1?v=104.5', s)
-          s = re.sub(r'(jk-sticker-store-v105\.css)(?:\?v=[^"\']*)?', r'\1?v=105.6', s)
-          s = re.sub(r'(jk-sticker-store-v105\.js)(?:\?v=[^"\']*)?', r'\1?v=105.6', s)
+          s = re.sub(r'(jk-sticker-store-v105\.css)(?:\?v=[^"\']*)?', r'\1?v=105.7', s)
+          s = re.sub(r'(jk-sticker-store-v105\.js)(?:\?v=[^"\']*)?', r'\1?v=105.7', s)
 
           s = re.sub(r'<style id="jk-sticker-pro-v100">.*?</style>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script id="jk-sticker-pro-v100">.*?</script>', '', s, flags=re.I|re.S)
