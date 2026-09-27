@@ -38,18 +38,20 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   const fallbackPurchase=await window.JKStickerV77.startPurchaseByPackId('v62_02');
   const prodPurchase=await window.JKStickerV77.startPurchaseByPackId('v62_31');
   await window.JKStickerStoreV105.open();
+  const firstStorePack=document.querySelector('.jk105-card')?.dataset?.jk105Pack||'';
+  const productionFirst=firstStorePack==='v62_31';
   window.JKStickerStoreV105.renderDetail('v62_02');
   const fallbackButton=document.querySelector('#jk105Buy');
   const fallbackUi=!!fallbackButton&&fallbackButton.disabled&&fallbackButton.textContent.includes('กำลังปรับงานภาพ');
   window.JKStickerStoreV105.renderDetail('v62_31');
   const prodButton=document.querySelector('#jk105Buy');
   const prodUi=!!prodButton&&prodButton.disabled&&prodButton.textContent.includes('ยังไม่เปิดชำระเงินจริง');
-  const pass=packs.length===50&&prodReady&&fallbackLocked&&fallbackPurchase?.error==='art_not_ready'&&prodPurchase?.error==='preview_payment_disabled'&&fallbackUi&&prodUi;
+  const pass=packs.length===50&&prodReady&&fallbackLocked&&productionFirst&&fallbackPurchase?.error==='art_not_ready'&&prodPurchase?.error==='preview_payment_disabled'&&fallbackUi&&prodUi;
   const badge=document.createElement('div');
   badge.id='jkStep12Qa';
   badge.textContent=pass
     ?'JK STICKER STEP 12 · PASS · 50 packs + art readiness + unfinished sale lock'
-    :'JK STICKER STEP 12 · FAIL · packs='+packs.length+' prod='+prodReady+' fallback='+fallbackLocked+' fp='+fallbackPurchase?.error+' pp='+prodPurchase?.error+' fui='+fallbackUi+' pui='+prodUi;
+    :'JK STICKER STEP 12 · FAIL · packs='+packs.length+' prod='+prodReady+' fallback='+fallbackLocked+' first='+productionFirst+' fp='+fallbackPurchase?.error+' pp='+prodPurchase?.error+' fui='+fallbackUi+' pui='+prodUi;
   document.body.prepend(badge);
 })();
 </script>
