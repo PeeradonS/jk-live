@@ -9,6 +9,42 @@ const api=()=>window.JKStickerV77||null;
 const isOwned=p=>!!(p&&(Number(p.amount_minor||0)===0||p.owned||api()?.isOwned?.(p)));
 const price=p=>{const n=Number(p?.amount_minor||0);return n===0?'ฟรี':(n/100).toLocaleString('th-TH')+' บาท'};
 const art=(i,cls='')=>api()?.artMarkup?.(i?.sticker_key,cls)||'<span class="jk105-fallback">JK</span>';
+function paymentState(){
+  const a=api();
+  const ps=a?.paymentStatus || {};
+  return {
+    ready:!!a?.paymentReady,
+    platform:String(ps.platform||'web'),
+    provider:String(ps.provider||'')
+  };
+}
+async function startPackPurchase(pack){
+  const a=api();
+  const status=q('#jk105PaymentStatus',overlay);
+  const btn=q('#jk105Buy',overlay);
+  if(!a?.startPurchaseByPackId){
+    if(status)status.textContent='ระบบชำระเงินยังไม่พร้อม';
+    return {ok:false,error:'purchase_api_unavailable'};
+  }
+  if(btn){btn.disabled=true;btn.textContent='กำลังเปิดช่องทางชำระเงิน…'}
+  const result=await a.startPurchaseByPackId(pack.pack_id);
+  if(result?.owned){
+    await restoreOwnership();
+    renderDetail(pack.pack_id);
+    return result;
+  }
+  if(result?.started){
+    if(status)status.textContent='เปิดช่องทางชำระเงินแล้ว · เมื่อผู้ให้บริการยืนยันการจ่าย ระบบจะเพิ่มแพ็กในบัญชีอัตโนมัติ';
+    if(btn){btn.disabled=false;btn.textContent='ซื้อ '+price(pack)}
+    return result;
+  }
+  const msg=result?.error==='payment_not_ready'||result?.error==='preview_payment_disabled'
+    ? 'ช่องทางชำระเงินจริงยังไม่เปิดใช้งาน'
+    : 'ยังเริ่มการชำระเงินไม่ได้ ลองใหม่อีกครั้ง';
+  if(status)status.textContent=msg;
+  if(btn){btn.disabled=!paymentState().ready;btn.textContent=paymentState().ready?'ซื้อ '+price(pack):'ยังไม่เปิดชำระเงินจริง'}
+  return result||{ok:false,error:'purchase_failed'};
+}
 
 function close(){
   if(!overlay)return;
@@ -96,11 +132,15 @@ function renderDetail(packId){
     '<div class="jk105-detail-action">'+
       (isOwned(p)
         ? '<button type="button" class="jk105-use" id="jk105Use">ใช้ชุดนี้</button><small>เปิดกลับไปที่ “ของฉัน” แล้วเลือกส่งได้ทันที</small>'
-        : '<div class="jk105-buy-row"><b>'+esc(price(p))+'</b><span>ระบบชำระเงินจริงยังไม่เปิดใน Preview นี้</span></div>')+
+        : (paymentState().ready
+          ? '<button type="button" class="jk105-buy" id="jk105Buy">ซื้อ '+esc(price(p))+'</button><small id="jk105PaymentStatus">เมื่อชำระสำเร็จ สิทธิ์จะผูกกับบัญชีและกู้คืนได้ทุกเครื่อง</small>'
+          : '<button type="button" class="jk105-buy" id="jk105Buy" disabled>ยังไม่เปิดชำระเงินจริง</button><small id="jk105PaymentStatus">ราคา '+esc(price(p))+' · ช่องทางชำระเงินกำลังเชื่อมต่อ ระบบจะไม่จำลองว่าสำเร็จ</small>'))+
     '</div>';
   q('#jk105Back',body).onclick=renderBrowse;
   const use=q('#jk105Use',body);
   if(use)use.onclick=async()=>{close();await window.JKStickerPickerV104?.openMinePack?.(p.pack_id)};
+  const buy=q('#jk105Buy',body);
+  if(buy&&!buy.disabled)buy.onclick=()=>startPackPurchase(p);
 }
 function shell(){
   const el=document.createElement('div');el.className='jk105-overlay';
@@ -138,7 +178,8 @@ function qaResult(){
 const QA_PARAMS=new URLSearchParams(location.search);
 const QA=QA_PARAMS.get('storeQaStep6')==='1';
 const QA7=QA_PARAMS.get('storeQaStep7')==='1';
-let qaDone=false,qaTries=0,qa7Done=false;
+const QA8=QA_PARAMS.get('storeQaStep8')==='1';
+let qaDone=false,qaTries=0,qa7Done=false,qa8Done=false;
 function qaBadge(text,pass=null){
   let badge=q('#jk105QaStatus');
   if(!badge){
@@ -212,10 +253,47 @@ async function runStep7Qa(){
     qaBadge('JK STICKER STEP 7 · FAIL · '+String(err?.message||err),false);
   }
 }
+async function runStep8Qa(){
+  if(!QA8||qa8Done)return;
+  const a=api();
+  if(!a?.getCatalog||!a?.startPurchaseByPackId)return setTimeout(runStep8Qa,250);
+  qa8Done=true;
+  try{
+    catalog=await a.getCatalog();
+    if(!overlay){
+      oldOverflow=document.documentElement.style.overflow;
+      document.documentElement.style.overflow='hidden';
+      overlay=shell();document.addEventListener('keydown',onKey);
+    }
+    const paid=catalog.find(p=>Number(p.amount_minor||0)>0&&!isOwned(p));
+    if(!paid)throw new Error('no_unowned_paid_pack');
+    const beforeOwned=isOwned(paid);
+    const ready=paymentState().ready;
+    renderDetail(paid.pack_id);
+    const btn=q('#jk105Buy',overlay);
+    const ctaPresent=!!btn;
+    const ctaEnabled=!!btn&&!btn.disabled;
+    let purchaseResult={ok:false,error:'not_called'};
+    if(ready&&ctaEnabled)purchaseResult=await startPackPurchase(paid);
+    const afterOwned=isOwned(paid);
+    const callCount=Number(window.__JK_QA_PURCHASE_CALLS||0);
+    const honestNoAutoUnlock=!afterOwned;
+    const pass=ready&&ctaPresent&&ctaEnabled&&!!purchaseResult?.started&&callCount===1&&honestNoAutoUnlock;
+    const result={pass,ready,ctaPresent,ctaEnabled,started:!!purchaseResult?.started,callCount,beforeOwned,afterOwned,honestNoAutoUnlock};
+    window.JK_STICKER_STORE_V105_STEP8_QA=result;
+    qaBadge(pass
+      ? 'JK STICKER STEP 8 · PASS · purchase CTA + no fake ownership'
+      : 'JK STICKER STEP 8 · FAIL · ready='+ready+' cta='+ctaPresent+'/'+ctaEnabled+' started='+!!purchaseResult?.started+' calls='+callCount+' owned='+beforeOwned+'>'+afterOwned,
+      pass);
+  }catch(err){
+    qaBadge('JK STICKER STEP 8 · FAIL · '+String(err?.message||err),false);
+  }
+}
 if(QA)qaBadge('JK STICKER STEP 6 · CHECKING');
 if(QA7)qaBadge('JK STICKER STEP 7 · CHECKING');
-document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{runQa();runStep7Qa()},120));
-setTimeout(()=>{runQa();runStep7Qa()},180);
+if(QA8)qaBadge('JK STICKER STEP 8 · CHECKING');
+document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{runQa();runStep7Qa();runStep8Qa()},120));
+setTimeout(()=>{runQa();runStep7Qa();runStep8Qa()},180);
 document.addEventListener('click',e=>{
   const tab=e.target.closest?.('[data-jk104-tab="store"]');
   if(!tab)return;
@@ -224,5 +302,5 @@ document.addEventListener('click',e=>{
   window.JKStickerPickerV104?.close?.();
   open();
 },true);
-window.JKStickerStoreV105={open,close,renderBrowse,renderDetail,restoreOwnership,runQa,runStep7Qa};
+window.JKStickerStoreV105={open,close,renderBrowse,renderDetail,restoreOwnership,startPackPurchase,runQa,runStep7Qa,runStep8Qa};
 })();
