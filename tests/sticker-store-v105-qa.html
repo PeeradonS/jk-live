@@ -10,6 +10,7 @@
 <script>
 const makePack=(id,title,category,owned,price)=>({
   pack_id:id,title,category,owned,amount_minor:price,
+  art_status:'production',sale_ready:true,real_asset_count:24,asset_standard:'JK-512-RGBA-v1',
   items:Array.from({length:24},(_,i)=>({
     sticker_key:id+'_'+String(i+1).padStart(2,'0'),
     caption_th:'คำที่ '+(i+1)
