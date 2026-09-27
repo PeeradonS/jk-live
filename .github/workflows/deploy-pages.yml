@@ -21,6 +21,11 @@ jobs:
       - name: Checkout deployment repo
         uses: actions/checkout@v4
 
+      - name: Validate sticker production JavaScript
+        run: |
+          node --check patches/jk-sticker-pro-v100.js
+          node --check patches/sticker-v77.js
+
       - name: Mirror current public JK production
         run: |
           rm -rf mirror site
