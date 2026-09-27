@@ -38,26 +38,36 @@ jobs:
           cp -R patches/. site/patches/
           python3 - <<'PY'
           from pathlib import Path
+          import re
+
           p = Path('site/index.html')
           s = p.read_text(encoding='utf-8')
-          import re
+
           s = re.sub(r'<iframe[^>]+(?:netlify|\.netlify)[^>]*>.*?</iframe>', '', s, flags=re.I|re.S)
-          s = re.sub(r'<script[^>]+src=[\"\'][^\"\']*(?:netlify|\.netlify)[^\"\']*[\"\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
-          head = '''
-          <link rel="stylesheet" href="./patches/sticker-shop-v62.css">
-          <link rel="stylesheet" href="./patches/sticker-v77.css">
-          <link rel="stylesheet" href="./patches/jk-live-ux-v91.css">
-          <link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">\n          <link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.3">
-          '''
-          body = '''
-          <script src="./patches/sticker-v77.js"></script>
-          <script src="./patches/jk-recovery-v90.js"></script>
-          <script src="./patches/jk-live-ux-v91.js"></script>\n          <script src="./patches/jk-prod-ui-v93.js?v=93.3"></script>
-          '''
-          if 'jk-prod-hybrid-v92.css' not in s:
-              s = s.replace('</head>', head + '</head>')
-          if 'jk-live-ux-v91.js' not in s:
-              s = s.replace('</body>', body + '</body>')
+          s = re.sub(r'<script[^>]+src=["\'][^"\']*(?:netlify|\.netlify)[^"\']*["\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
+
+          head_assets = [
+              ('sticker-shop-v62.css', '<link rel="stylesheet" href="./patches/sticker-shop-v62.css">'),
+              ('sticker-v77.css', '<link rel="stylesheet" href="./patches/sticker-v77.css">'),
+              ('jk-live-ux-v91.css', '<link rel="stylesheet" href="./patches/jk-live-ux-v91.css">'),
+              ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
+              ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
+          ]
+          body_assets = [
+              ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
+              ('jk-recovery-v90.js', '<script src="./patches/jk-recovery-v90.js"></script>'),
+              ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
+              ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
+          ]
+
+          for key, tag in head_assets:
+              if key not in s:
+                  s = s.replace('</head>', tag + '\n</head>')
+
+          for key, tag in body_assets:
+              if key not in s:
+                  s = s.replace('</body>', tag + '\n</body>')
+
           p.write_text(s, encoding='utf-8')
           PY
           touch site/.nojekyll
