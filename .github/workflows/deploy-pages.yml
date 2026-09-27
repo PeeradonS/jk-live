@@ -61,14 +61,14 @@ jobs:
               ('jk-live-ux-v91.css', '<link rel="stylesheet" href="./patches/jk-live-ux-v91.css">'),
               ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
               ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
-              ('jk-sticker-picker-v104.css', '<link rel="stylesheet" href="./patches/jk-sticker-picker-v104.css?v=104.2">'),
+              ('jk-sticker-picker-v104.css', '<link rel="stylesheet" href="./patches/jk-sticker-picker-v104.css?v=104.5">'),
           ]
           body_assets = [
               ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
               ('jk-recovery-v90.js', '<script src="./patches/jk-recovery-v90.js"></script>'),
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
-              ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.4"></script>'),
+              ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.5"></script>'),
           ]
 
           for key, tag in head_assets:
@@ -78,6 +78,10 @@ jobs:
           for key, tag in body_assets:
               if key not in s:
                   s = s.replace('</body>', tag + '\n</body>')
+
+          # Always normalize Sticker Picker cache versions even when mirrored HTML already contains the tag.
+          s = re.sub(r'(jk-sticker-picker-v104\.css)(?:\?v=[^"\']*)?', r'\1?v=104.5', s)
+          s = re.sub(r'(jk-sticker-picker-v104\.js)(?:\?v=[^"\']*)?', r'\1?v=104.5', s)
 
           s = re.sub(r'<style id="jk-sticker-pro-v100">.*?</style>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script id="jk-sticker-pro-v100">.*?</script>', '', s, flags=re.I|re.S)
