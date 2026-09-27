@@ -27,6 +27,7 @@ jobs:
           node --check patches/jk-sticker-picker-v104.js
           node --check patches/jk-sticker-store-v105.js
           node --check patches/jk-sticker-interactions-v106.js
+          node --check patches/jk-sticker-performance-v107.js
           node --check patches/sticker-v77.js
 
       - name: Mirror current public JK production
@@ -58,7 +59,7 @@ jobs:
 
           s = re.sub(r'<iframe[^>]+(?:netlify|\.netlify)[^>]*>.*?</iframe>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script[^>]+src=["\'][^"\']*(?:netlify|\.netlify)[^"\']*["\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
-          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.4"')
+          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.5"')
 
           head_assets = [
               ('sticker-shop-v62.css', '<link rel="stylesheet" href="./patches/sticker-shop-v62.css">'),
@@ -67,7 +68,7 @@ jobs:
               ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
               ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
               ('jk-sticker-picker-v104.css', '<link rel="stylesheet" href="./patches/jk-sticker-picker-v104.css?v=104.5">'),
-              ('jk-sticker-store-v105.css', '<link rel="stylesheet" href="./patches/jk-sticker-store-v105.css?v=105.4">'),
+              ('jk-sticker-store-v105.css', '<link rel="stylesheet" href="./patches/jk-sticker-store-v105.css?v=105.5">'),
           ]
           body_assets = [
               ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
@@ -75,7 +76,7 @@ jobs:
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
               ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.5"></script>'),
-              ('jk-sticker-store-v105.js', '<script src="./patches/jk-sticker-store-v105.js?v=105.4"></script>'),
+              ('jk-sticker-store-v105.js', '<script src="./patches/jk-sticker-store-v105.js?v=105.5"></script>'),
           ]
 
           for key, tag in head_assets:
@@ -89,8 +90,8 @@ jobs:
           # Always normalize Sticker Picker cache versions even when mirrored HTML already contains the tag.
           s = re.sub(r'(jk-sticker-picker-v104\.css)(?:\?v=[^"\']*)?', r'\1?v=104.5', s)
           s = re.sub(r'(jk-sticker-picker-v104\.js)(?:\?v=[^"\']*)?', r'\1?v=104.5', s)
-          s = re.sub(r'(jk-sticker-store-v105\.css)(?:\?v=[^"\']*)?', r'\1?v=105.4', s)
-          s = re.sub(r'(jk-sticker-store-v105\.js)(?:\?v=[^"\']*)?', r'\1?v=105.4', s)
+          s = re.sub(r'(jk-sticker-store-v105\.css)(?:\?v=[^"\']*)?', r'\1?v=105.5', s)
+          s = re.sub(r'(jk-sticker-store-v105\.js)(?:\?v=[^"\']*)?', r'\1?v=105.5', s)
 
           s = re.sub(r'<style id="jk-sticker-pro-v100">.*?</style>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script id="jk-sticker-pro-v100">.*?</script>', '', s, flags=re.I|re.S)
@@ -153,7 +154,13 @@ jobs:
             >/tmp/jk-sticker-step9-qa.html
           grep -q "JK STICKER STEP 9 · PASS · existing long press + reply + favorite + resend" /tmp/jk-sticker-step9-qa.html
 
-          echo "Sticker Store v105 browser QA PASS · STEP 6 + STEP 7 + STEP 8 + STEP 9"
+          "$CHROME" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=5000 \
+            --dump-dom "http://127.0.0.1:8765/tests/sticker-performance-v107-qa.html?stickerQaStep10=1" \
+            >/tmp/jk-sticker-step10-qa.html
+          grep -q "JK STICKER STEP 10 · PASS · 12-pack batching + deferred art + max 3 concurrent" /tmp/jk-sticker-step10-qa.html
+
+          echo "Sticker browser QA PASS · STEP 6 + STEP 7 + STEP 8 + STEP 9 + STEP 10"
 
           "$CHROME" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
             --virtual-time-budget=6000 \
