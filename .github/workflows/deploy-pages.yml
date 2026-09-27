@@ -23,7 +23,7 @@ jobs:
 
       - name: Validate sticker production JavaScript
         run: |
-          node --check patches/jk-sticker-pro-v100.js
+          node --check patches/jk-sticker-renderer-v101.js
           node --check patches/sticker-v77.js
 
       - name: Mirror current public JK production
@@ -73,15 +73,18 @@ jobs:
               if key not in s:
                   s = s.replace('</body>', tag + '\n</body>')
 
-          sticker_css = Path('site/patches/jk-sticker-pro-v100.css').read_text(encoding='utf-8')
-          sticker_js = Path('site/patches/jk-sticker-pro-v100.js').read_text(encoding='utf-8')
           s = re.sub(r'<style id="jk-sticker-pro-v100">.*?</style>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script id="jk-sticker-pro-v100">.*?</script>', '', s, flags=re.I|re.S)
-          s = s.replace('</head>', '<style id="jk-sticker-pro-v100">' + sticker_css + '</style>\n</head>')
-          s = s.replace('</body>', '<script id="jk-sticker-pro-v100">' + sticker_js.replace('</script>', '<\\/script>') + '</script>\n</body>')
+          s = re.sub(r'<style id="jk-sticker-renderer-v101">.*?</style>', '', s, flags=re.I|re.S)
+          s = re.sub(r'<script id="jk-sticker-renderer-v101">.*?</script>', '', s, flags=re.I|re.S)
 
-          if 'JK_STICKER_PRO_V100' not in s:
-              raise SystemExit('Sticker Pro v100 was not embedded into production HTML')
+          sticker_css = Path('site/patches/jk-sticker-renderer-v101.css').read_text(encoding='utf-8')
+          sticker_js = Path('site/patches/jk-sticker-renderer-v101.js').read_text(encoding='utf-8')
+          s = s.replace('</head>', '<style id="jk-sticker-renderer-v101">' + sticker_css + '</style>\n</head>')
+          s = s.replace('</body>', '<script id="jk-sticker-renderer-v101">' + sticker_js.replace('</script>', '<\\/script>') + '</script>\n</body>')
+
+          if 'JK_STICKER_RENDERER_V101' not in s:
+              raise SystemExit('Sticker Renderer v101 was not embedded into production HTML')
 
           p.write_text(s, encoding='utf-8')
           PY
