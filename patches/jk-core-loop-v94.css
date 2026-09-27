@@ -1,128 +1,128 @@
 /* JK Core Loop v94 · conversation-first */
-html[data-jk-ui="v94"] #page[data-route="discover"] .jk-city-hero-copy{position:relative}
-html[data-jk-ui="v94"] .jk94-hero-actions{
+html[data-jk-core="v94"] #page[data-route="discover"] .jk-city-hero-copy{position:relative}
+html[data-jk-core="v94"] .jk94-hero-actions{
   display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);gap:9px;margin-top:18px
 }
-html[data-jk-ui="v94"] .jk94-hero-actions button{
+html[data-jk-core="v94"] .jk94-hero-actions button{
   min-height:48px;border-radius:15px;border:1px solid rgba(255,255,255,.22);
   font-weight:900;font-size:13px;padding:0 13px
 }
-html[data-jk-ui="v94"] .jk94-hero-actions .primary{
+html[data-jk-core="v94"] .jk94-hero-actions .primary{
   background:#fff;color:#25191d;box-shadow:0 7px 18px rgba(24,11,15,.12)
 }
-html[data-jk-ui="v94"] .jk94-hero-actions .secondary{
+html[data-jk-core="v94"] .jk94-hero-actions .secondary{
   background:rgba(255,255,255,.11);color:#fff
 }
-html[data-jk-ui="v94"] #jkPeople93{margin-top:22px!important}
-html[data-jk-ui="v94"] #jkPeople93 .jk-home-heading{
+html[data-jk-core="v94"] #jkPeople93{margin-top:22px!important}
+html[data-jk-core="v94"] #jkPeople93 .jk-home-heading{
   align-items:end!important;gap:10px!important
 }
-html[data-jk-ui="v94"] #jkPeople93 .jk-home-heading>button{
+html[data-jk-core="v94"] #jkPeople93 .jk-home-heading>button{
   border:0!important;background:transparent!important;color:var(--jk93-red)!important;
   font-weight:900!important;font-size:12px!important;padding:8px 0!important;white-space:nowrap
 }
-html[data-jk-ui="v94"] #jkPeople93 .jk-person-peek.jk94-online{
+html[data-jk-core="v94"] #jkPeople93 .jk-person-peek.jk94-online{
   border-color:#d7eedd!important;box-shadow:0 0 0 3px rgba(38,184,121,.07)!important
 }
-html[data-jk-ui="v94"] #jkPeople93 .jk-person-peek.jk94-online small{color:#168653!important;font-weight:850!important}
-html[data-jk-ui="v94"] #jkIntent93{margin-top:18px!important}
-html[data-jk-ui="v94"] #page[data-route="discover"] .jk-way-section{margin-top:20px!important}
-html[data-jk-ui="v94"] #page[data-route="discover"] .jk-way-section .jk-home-heading h2{font-size:18px!important}
+html[data-jk-core="v94"] #jkPeople93 .jk-person-peek.jk94-online small{color:#168653!important;font-weight:850!important}
+html[data-jk-core="v94"] #jkIntent93{margin-top:18px!important}
+html[data-jk-core="v94"] #page[data-route="discover"] .jk-way-section{margin-top:20px!important}
+html[data-jk-core="v94"] #page[data-route="discover"] .jk-way-section .jk-home-heading h2{font-size:18px!important}
 
 /* Real incoming attention only */
-html[data-jk-ui="v94"] .jk94-incoming-banner{
+html[data-jk-core="v94"] .jk94-incoming-banner{
   width:100%;display:flex;align-items:center;gap:11px;border:1px solid #f0cad4;
   background:linear-gradient(135deg,#fff4f7,#fff);border-radius:20px;padding:14px 15px;margin:0 0 13px;
   text-align:left;box-shadow:0 7px 20px rgba(93,26,47,.055)
 }
-html[data-jk-ui="v94"] .jk94-incoming-banner .mark{
+html[data-jk-core="v94"] .jk94-incoming-banner .mark{
   width:42px;height:42px;flex:0 0 42px;border-radius:14px;display:grid;place-items:center;
   background:#c91f3b;color:#fff;font-size:19px;font-weight:950
 }
-html[data-jk-ui="v94"] .jk94-incoming-banner .grow{min-width:0;flex:1}
-html[data-jk-ui="v94"] .jk94-incoming-banner b{display:block;font-size:15px;color:#281a1f}
-html[data-jk-ui="v94"] .jk94-incoming-banner small{display:block;margin-top:2px;color:#806f75;font-size:11px;line-height:1.45}
-html[data-jk-ui="v94"] .jk94-incoming-banner strong{color:#c91f3b;font-size:13px;white-space:nowrap}
-html[data-jk-ui="v94"] .jk-v17-nav .jk94-chat-badge{
+html[data-jk-core="v94"] .jk94-incoming-banner .grow{min-width:0;flex:1}
+html[data-jk-core="v94"] .jk94-incoming-banner b{display:block;font-size:15px;color:#281a1f}
+html[data-jk-core="v94"] .jk94-incoming-banner small{display:block;margin-top:2px;color:#806f75;font-size:11px;line-height:1.45}
+html[data-jk-core="v94"] .jk94-incoming-banner strong{color:#c91f3b;font-size:13px;white-space:nowrap}
+html[data-jk-core="v94"] .jk-v17-nav .jk94-chat-badge{
   position:absolute;top:4px;right:14px;min-width:18px;height:18px;padding:0 5px;border-radius:99px;
   display:grid;place-items:center;background:#c91f3b;color:#fff;font-size:10px;font-weight:950;
   border:2px solid #fff
 }
-html[data-jk-ui="v94"] .jk-v17-nav .nav-btn[data-route="chat"]{position:relative}
-html[data-jk-ui="v94"] #page[data-route="chat"] .jk94-requests-head{
+html[data-jk-core="v94"] .jk-v17-nav .nav-btn[data-route="chat"]{position:relative}
+html[data-jk-core="v94"] #page[data-route="chat"] .jk94-requests-head{
   margin-top:2px!important;padding-top:0!important
 }
-html[data-jk-ui="v94"] #page[data-route="chat"] .jk94-requests-head h3{
+html[data-jk-core="v94"] #page[data-route="chat"] .jk94-requests-head h3{
   font-size:18px!important;color:#321c24!important
 }
-html[data-jk-ui="v94"] #page[data-route="chat"] .request-stack{
+html[data-jk-core="v94"] #page[data-route="chat"] .request-stack{
   display:grid!important;gap:9px!important;padding:9px!important
 }
-html[data-jk-ui="v94"] #page[data-route="chat"] .request-card{
+html[data-jk-core="v94"] #page[data-route="chat"] .request-card{
   display:grid!important;grid-template-columns:54px 1fr!important;gap:11px!important;
   background:#fff!important;border:1px solid #f0e2e6!important;border-radius:18px!important;
   padding:11px!important;box-shadow:none!important
 }
-html[data-jk-ui="v94"] #page[data-route="chat"] .request-card .avatar{
+html[data-jk-core="v94"] #page[data-route="chat"] .request-card .avatar{
   width:54px!important;height:54px!important;border-radius:17px!important;overflow:hidden!important
 }
-html[data-jk-ui="v94"] #page[data-route="chat"] .request-card h4{font-size:16px!important;margin:0 0 4px!important}
-html[data-jk-ui="v94"] #page[data-route="chat"] .request-card p{font-size:13px!important;line-height:1.5!important;margin:7px 0 9px!important}
-html[data-jk-ui="v94"] #page[data-route="chat"] .request-card .request-actions{
+html[data-jk-core="v94"] #page[data-route="chat"] .request-card h4{font-size:16px!important;margin:0 0 4px!important}
+html[data-jk-core="v94"] #page[data-route="chat"] .request-card p{font-size:13px!important;line-height:1.5!important;margin:7px 0 9px!important}
+html[data-jk-core="v94"] #page[data-route="chat"] .request-card .request-actions{
   display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important
 }
-html[data-jk-ui="v94"] #page[data-route="chat"] .request-card .request-actions .btn{
+html[data-jk-core="v94"] #page[data-route="chat"] .request-card .request-actions .btn{
   min-height:38px!important;border-radius:12px!important;font-size:12px!important
 }
-html[data-jk-ui="v94"] #page[data-route="chat"] .request-card [data-request-action="accept"]{
+html[data-jk-core="v94"] #page[data-route="chat"] .request-card [data-request-action="accept"]{
   grid-column:1/-1!important;min-height:43px!important;background:#c91f3b!important;color:#fff!important
 }
 
 /* Profile: decide fast, detail later */
-html[data-jk-ui="v94"] #modalRoot .jk94-profile-modal .jk-profile-preview{
+html[data-jk-core="v94"] #modalRoot .jk94-profile-modal .jk-profile-preview{
   padding-bottom:8px!important
 }
-html[data-jk-ui="v94"] #modalRoot .jk94-profile-modal .jk-profile-actions{
+html[data-jk-core="v94"] #modalRoot .jk94-profile-modal .jk-profile-actions{
   display:grid!important;grid-template-columns:1fr!important;gap:8px!important;margin:14px 0 8px!important
 }
-html[data-jk-ui="v94"] #modalRoot .jk94-profile-modal .jk-profile-actions .btn.primary{
+html[data-jk-core="v94"] #modalRoot .jk94-profile-modal .jk-profile-actions .btn.primary{
   min-height:52px!important;border-radius:16px!important;font-size:15px!important;font-weight:950!important;
   background:#c91f3b!important;color:#fff!important;box-shadow:0 8px 18px rgba(201,31,59,.16)!important
 }
-html[data-jk-ui="v94"] #modalRoot .jk94-profile-modal #exploreOpening{
+html[data-jk-core="v94"] #modalRoot .jk94-profile-modal #exploreOpening{
   min-height:46px!important;border-radius:15px!important;background:#fff5f7!important;color:#a71834!important;
   border:1px solid #f0d8de!important;font-weight:900!important
 }
-html[data-jk-ui="v94"] #modalRoot .jk94-profile-modal .jk94-profile-note{
+html[data-jk-core="v94"] #modalRoot .jk94-profile-modal .jk94-profile-note{
   display:flex;align-items:center;gap:7px;color:#7f7075;font-size:11px;line-height:1.45;margin:7px 0 13px
 }
-html[data-jk-ui="v94"] #modalRoot .jk94-profile-modal #profilePrivacyHintV34,
-html[data-jk-ui="v94"] #modalRoot .jk94-profile-modal #profileMutualV53{display:none!important}
+html[data-jk-core="v94"] #modalRoot .jk94-profile-modal #profilePrivacyHintV34,
+html[data-jk-core="v94"] #modalRoot .jk94-profile-modal #profileMutualV53{display:none!important}
 
 /* First message */
-html[data-jk-ui="v94"] #messageRequestForm .intro-quota-v18{display:none!important}
-html[data-jk-ui="v94"] #messageRequestForm #priorityHelloV44{display:none!important}
-html[data-jk-ui="v94"] .jk94-starter-wrap{margin:4px 0 13px}
-html[data-jk-ui="v94"] .jk94-starter-wrap>small{
+html[data-jk-core="v94"] #messageRequestForm .intro-quota-v18{display:none!important}
+html[data-jk-core="v94"] #messageRequestForm #priorityHelloV44{display:none!important}
+html[data-jk-core="v94"] .jk94-starter-wrap{margin:4px 0 13px}
+html[data-jk-core="v94"] .jk94-starter-wrap>small{
   display:block;color:#827277;font-size:11px;font-weight:850;margin-bottom:7px
 }
-html[data-jk-ui="v94"] .jk94-starters{display:flex;gap:7px;overflow:auto;padding-bottom:3px;scrollbar-width:none}
-html[data-jk-ui="v94"] .jk94-starters::-webkit-scrollbar{display:none}
-html[data-jk-ui="v94"] .jk94-starters button{
+html[data-jk-core="v94"] .jk94-starters{display:flex;gap:7px;overflow:auto;padding-bottom:3px;scrollbar-width:none}
+html[data-jk-core="v94"] .jk94-starters::-webkit-scrollbar{display:none}
+html[data-jk-core="v94"] .jk94-starters button{
   flex:0 0 auto;max-width:230px;text-align:left;border:1px solid #eadfe2;background:#fff;
   color:#49343b;border-radius:14px;padding:9px 11px;font-size:12px;line-height:1.4
 }
-html[data-jk-ui="v94"] #messageRequestForm textarea{
+html[data-jk-core="v94"] #messageRequestForm textarea{
   min-height:112px!important;border-radius:16px!important;border:1px solid #e7dce0!important;
   font-size:15px!important;line-height:1.55!important;color:#25191e!important;caret-color:#c91f3b!important
 }
-html[data-jk-ui="v94"] .jk94-intro-help{
+html[data-jk-core="v94"] .jk94-intro-help{
   color:#8b7b80;font-size:11px;line-height:1.5;margin:-5px 2px 12px
 }
-html[data-jk-ui="v94"] #messageRequestForm button[type="submit"],
-html[data-jk-ui="v94"] #messageRequestForm button.btn.primary.full{
+html[data-jk-core="v94"] #messageRequestForm button[type="submit"],
+html[data-jk-core="v94"] #messageRequestForm button.btn.primary.full{
   min-height:50px!important;border-radius:16px!important;background:#c91f3b!important;color:#fff!important;font-weight:950!important
 }
 @media(max-width:370px){
-  html[data-jk-ui="v94"] .jk94-hero-actions{grid-template-columns:1fr}
+  html[data-jk-core="v94"] .jk94-hero-actions{grid-template-columns:1fr}
 }
