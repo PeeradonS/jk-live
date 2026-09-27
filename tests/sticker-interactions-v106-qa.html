@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><title>JK Sticker STEP 9 QA</title></head>
+<body>
+<script>
+let fav=[];
+window.JKStickerPickerV104={
+  favorites:()=>fav.slice(),
+  toggleFav:(pack,key)=>{
+    const id=pack+'|'+key;
+    fav=fav.includes(id)?fav.filter(x=>x!==id):[id,...fav];
+  }
+};
+window.JKStickerV77={sendByKey:async()=>true};
+window.JKStickerBridgeV77={toast:()=>{}};
+</script>
+<script src="../patches/jk-sticker-interactions-v106.js"></script>
+</body></html>
