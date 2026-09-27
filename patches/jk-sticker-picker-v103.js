@@ -180,8 +180,17 @@ function showQaStatus(result){
 async function runQa(){
   if(!QA_RUN||qaRan)return;
   const bridge=window.JKStickerBridgeV77;
-  if(!bridge?.preview||!bridge?.activeMatch?.())return;
-  const a=api(); if(!a)return;
+  const a=api();
+  const hasMatch=!!bridge?.activeMatch?.();
+  if(!bridge?.preview||!hasMatch||!a){
+    showQaStatus({
+      pass:false,
+      sent:false,
+      recent_first_match:false,
+      error:'WAIT preview='+!!bridge?.preview+' match='+hasMatch+' api='+!!a
+    });
+    return;
+  }
   qaRan=true;
   const result={pass:false,sent:false,recent_first_match:false};
   try{
