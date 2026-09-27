@@ -52,6 +52,10 @@ function upgradeWrap(wrap){
       asset.setAttribute('width','512');
       asset.setAttribute('height','512');
     }
+    const stickerKey=asset.getAttribute('data-sticker-key')||'';
+    const stickerPack=asset.getAttribute('data-sticker-pack')||'';
+    if(stickerKey)wrap.setAttribute('data-sticker-key',stickerKey);
+    if(stickerPack)wrap.setAttribute('data-sticker-pack',stickerPack);
     asset.classList.add('jk-sticker-art-v101');
     const parent=asset.closest('[class*="sticker-bubble"]');
     if(parent)parent.classList.add('jk-sticker-host-v101');
