@@ -26357,7 +26357,7 @@
             });
             add('resendStickerV106', 'ส่งสติ๊กเกอร์นี้อีกครั้ง', 'ไม่ต้องไล่หาจากทั้งแพ็ก', '›', () => resendStickerV106(msg));
           }
-          $('[data-react-v28]', modalRoot()).forEach(
+          $$('[data-react-v28]', modalRoot()).forEach(
             b => (b.onclick = () => toggleReactionV28(id, b.dataset.reactV28))
           );
           $('#replyMessageV28', modalRoot()).onclick = () => {
