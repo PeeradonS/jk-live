@@ -88,7 +88,7 @@
           render_family:n === 31 ? 'bad_boy_png_v62' : 'jk_runtime_png_v65',
           render_seed:n*100 + i + 1,
           category,
-          asset_path:n === 31 ? './resources/stickers/bad-boy-24/' + String(i+1).padStart(2,'0') + '.png' : ''
+          asset_path:n === 31 ? './resources/stickers/standardized/bad-boy/' + String(i+1).padStart(2,'0') + '.png' : ''
         }))
       };
     });
