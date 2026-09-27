@@ -3,7 +3,14 @@ const RECENT_KEY='jk_sticker_recent_v104';
 const FAV_KEY='jk_sticker_favorites_v104';
 const USAGE_KEY='jk_sticker_usage_v104';
 const MAX_RECENT=16;
+const CATEGORY_LABELS={
+  cute:'น่ารัก',pets:'สัตว์เลี้ยง',reptile:'สัตว์จิ๋ว',love:'ความรัก',dating:'จีบ/คุย',
+  feelings:'อารมณ์',daily:'ทุกวัน',lifestyle:'ไลฟ์สไตล์',work:'งาน',nerd:'เนิร์ด',
+  gaming:'เกม',men:'ผู้ชาย',women:'ผู้หญิง',women_mischief:'สาวเจ้าเล่ห์',
+  pride:'Pride',couple:'คู่รัก'
+};
 let overlay=null,activePackId='',catalog=[],busy=false,oldOverflow='',activeTab='recent';
+let storeQuery='',storeCategory='';
 
 const q=(s,r=document)=>r?.querySelector?.(s)||null;
 const qa=(s,r=document)=>r?.querySelectorAll?[...r.querySelectorAll(s)]:[];
@@ -130,23 +137,80 @@ function renderMine(packId=''){
     '<div class="jk104-grid">'+p.items.map(i=>tile(p,i)).join('')+'</div>';
   bindTiles(body);
 }
-function renderStore(){
-  if(window.JKStickerStoreV105?.open){
-    close();
-    window.JKStickerStoreV105.open();
-    return;
-  }
-  if(!overlay)return;const body=q('.jk104-body',overlay),packs=q('.jk104-packs',overlay);packs.innerHTML='';
-  body.innerHTML='<div class="jk104-storehead"><div><small>JK ORIGINAL</small><b>ร้าน Sticker</b><span>24 ภาพต่อชุด · ซื้อแล้วใช้กับบัญชีเดิมได้</span></div></div>'+
-    '<div class="jk104-storegrid">'+catalog.map(p=>{
-      const previews=(p.items||[]).slice(0,2).map(i=>art(i,'jk104-cover-art')).join('');
-      return '<button class="jk104-storecard" type="button" data-jk104-store="'+esc(p.pack_id)+'"><div class="jk104-cover">'+previews+'</div><b>'+esc(p.title)+'</b><small>'+p.items.length+' ภาพ</small><strong>'+(owned(p)?'มีแล้ว':price(p))+'</strong></button>';
-    }).join('')+'</div>';
-  qa('[data-jk104-store]',body).forEach(b=>b.onclick=()=>{
-    const p=catalog.find(x=>x.pack_id===b.dataset.jk104Store);if(!p)return;
-    if(owned(p)){activePackId=p.pack_id;switchTab('mine');return}
-    close();api()?.openPack?.(p.pack_id,'store');
+function storeStatus(pack){
+  if(owned(pack))return Number(pack.amount_minor||0)===0?'ฟรี':'มีแล้ว';
+  return price(pack);
+}
+function storeCard(pack){
+  const previews=(pack.items||[]).slice(0,3).map(i=>art(i,'jk104-cover-art')).join('');
+  const status=storeStatus(pack);
+  return '<button class="jk104-storecard '+(owned(pack)?'owned':'')+'" type="button" data-jk104-store="'+esc(pack.pack_id)+'">'+
+    '<div class="jk104-cover">'+previews+'<span class="jk104-storebadge">'+esc(status)+'</span></div>'+
+    '<div class="jk104-storemeta"><b>'+esc(pack.title)+'</b><small>'+esc(CATEGORY_LABELS[pack.category]||pack.category||'Sticker')+' · '+(pack.items||[]).length+' ภาพ</small></div>'+
+    '<strong>'+(owned(pack)?'เปิดใช้ชุดนี้ ›':'ดูชุดนี้ ›')+'</strong></button>';
+}
+function filteredStorePacks(){
+  const needle=storeQuery.trim().toLocaleLowerCase('th');
+  return catalog.filter(p=>{
+    if(storeCategory&&p.category!==storeCategory)return false;
+    if(!needle)return true;
+    const hay=[p.title,CATEGORY_LABELS[p.category]||p.category,...(p.items||[]).map(i=>i.caption_th)].join(' ').toLocaleLowerCase('th');
+    return hay.includes(needle);
   });
+}
+function paintStoreResults(){
+  if(!overlay)return;
+  const body=q('.jk104-body',overlay);
+  const grid=q('#jk104StoreGrid',body),count=q('#jk104StoreCount',body),chips=q('#jk104StoreCats',body);
+  if(!grid||!count||!chips)return;
+  const rows=filteredStorePacks();
+  count.textContent=rows.length+' ชุด';
+  chips.innerHTML='<button type="button" data-jk104-cat="" class="'+(!storeCategory?'active':'')+'">ทั้งหมด</button>'+
+    [...new Set(catalog.map(p=>p.category).filter(Boolean))].map(cat=>'<button type="button" data-jk104-cat="'+esc(cat)+'" class="'+(storeCategory===cat?'active':'')+'">'+esc(CATEGORY_LABELS[cat]||cat)+'</button>').join('');
+  grid.innerHTML=rows.length?rows.map(storeCard).join(''):'<div class="jk104-empty jk104-store-empty">ไม่พบชุดที่ตรงกับคำค้น</div>';
+  qa('[data-jk104-cat]',chips).forEach(b=>b.onclick=()=>{storeCategory=b.dataset.jk104Cat||'';paintStoreResults()});
+  qa('[data-jk104-store]',grid).forEach(b=>b.onclick=()=>renderStorePack(b.dataset.jk104Store));
+}
+function renderStore(){
+  if(!overlay)return;
+  const body=q('.jk104-body',overlay),packs=q('.jk104-packs',overlay);packs.innerHTML='';
+  body.innerHTML='<div class="jk104-storehead"><div><small>JK ORIGINAL</small><b>ร้าน Sticker</b><span>24 ภาพต่อชุด · ซื้อแล้วผูกกับบัญชีและโหลดกลับได้</span></div></div>'+
+    '<div class="jk104-storetools">'+
+      '<label class="jk104-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input id="jk104StoreSearch" type="search" autocomplete="off" placeholder="ค้นหาชุดหรือคำ เช่น ฝันดี แมว Bad Boy"></label>'+
+      '<div class="jk104-storebar"><div id="jk104StoreCats" class="jk104-catbar"></div><small id="jk104StoreCount"></small></div>'+
+    '</div>'+
+    '<div id="jk104StoreGrid" class="jk104-storegrid"></div>';
+  const input=q('#jk104StoreSearch',body);
+  input.value=storeQuery;
+  input.addEventListener('input',()=>{storeQuery=input.value;paintStoreResults()});
+  paintStoreResults();
+}
+function renderStorePack(packId){
+  if(!overlay)return;
+  const pack=catalog.find(p=>p.pack_id===packId);
+  if(!pack)return renderStore();
+  const body=q('.jk104-body',overlay),packs=q('.jk104-packs',overlay);packs.innerHTML='';
+  const itemCount=(pack.items||[]).length;
+  const preview=(pack.items||[]).map(i=>'<div class="jk104-preview-sticker">'+art(i,'jk104-preview-art')+'<small>'+esc(i.caption_th)+'</small></div>').join('');
+  const status=storeStatus(pack);
+  body.innerHTML='<button type="button" class="jk104-storeback" id="jk104StoreBack">‹ กลับร้าน Sticker</button>'+
+    '<section class="jk104-packhero">'+
+      '<div class="jk104-packhero-art">'+(pack.items||[]).slice(0,3).map(i=>art(i,'jk104-packhero-img')).join('')+'</div>'+
+      '<div class="jk104-packhero-copy"><small>'+esc(CATEGORY_LABELS[pack.category]||pack.category||'JK ORIGINAL')+'</small><h3>'+esc(pack.title)+'</h3><p>'+itemCount+' ภาพ · PNG โปร่งใส · คำไทยในภาพ</p><strong>'+esc(status)+'</strong></div>'+
+    '</section>'+
+    '<div class="jk104-title jk104-preview-title"><div><b>ดูทั้งชุด</b><small>ครบ '+itemCount+' ภาพก่อนตัดสินใจ</small></div></div>'+
+    '<div class="jk104-previewgrid">'+preview+'</div>'+
+    '<div class="jk104-storecta">'+
+      (owned(pack)
+        ? '<button type="button" class="primary" id="jk104UsePack">ใช้ชุดนี้</button>'
+        : '<button type="button" class="primary" id="jk104BuyPack">ซื้อชุดนี้ · '+esc(price(pack))+'</button>')+
+      '<small>'+(owned(pack)?'ชุดนี้อยู่ในบัญชีของคุณแล้ว':'ระบบชำระเงินจริงจะเปิดเมื่อ Store Billing พร้อม ไม่ทำรายการปลอม')+'</small>'+
+    '</div>';
+  q('#jk104StoreBack',body).onclick=renderStore;
+  const use=q('#jk104UsePack',body);
+  if(use)use.onclick=()=>{activePackId=pack.pack_id;switchTab('mine')};
+  const buy=q('#jk104BuyPack',body);
+  if(buy)buy.onclick=()=>{close();api()?.openPack?.(pack.pack_id,'store')};
 }
 function renderCurrent(){if(activeTab==='recent')renderRecent();else if(activeTab==='mine')renderMine();else renderStore()}
 function switchTab(tab){setTab(tab);renderCurrent()}
@@ -294,6 +358,36 @@ async function runStep5Qa(){
     : 'JK STICKER STEP 5 · FAIL · fav='+result.favorite+' usage='+result.usage+' recent='+result.recent;
 }
 
+const QA_STEP6=new URLSearchParams(location.search).get('pickerQaStep6')==='1';
+let qaStep6Ran=false;
+async function runStep6Qa(){
+  if(!QA_STEP6||qaStep6Ran)return;
+  const a=api();if(!a)return;
+  qaStep6Ran=true;
+  const result={pass:false,search:false,categories:false,cards:false,preview24:false,cta:false,status:false};
+  try{
+    catalog=await a.getCatalog();
+    oldOverflow=document.documentElement.style.overflow;
+    overlay=shell();setTab('store');renderStore();
+    result.search=!!q('#jk104StoreSearch',overlay);
+    result.categories=qa('[data-jk104-cat]',overlay).length>1;
+    result.cards=qa('[data-jk104-store]',overlay).length===catalog.length;
+    const pack=catalog.find(p=>(p.items||[]).length===24)||catalog[0];
+    renderStorePack(pack.pack_id);
+    result.preview24=qa('.jk104-preview-sticker',overlay).length===24;
+    result.cta=!!q('#jk104UsePack,#jk104BuyPack',overlay);
+    result.status=!!q('.jk104-packhero-copy strong',overlay)?.textContent?.trim();
+    result.pass=result.search&&result.categories&&result.cards&&result.preview24&&result.cta&&result.status;
+  }catch(err){result.error=String(err?.message||err)}
+  close();
+  window.JK_STICKER_PICKER_V104_STEP6_QA=result;
+  let el=q('#jk104QaStatus');
+  if(!el){el=document.createElement('div');el.id='jk104QaStatus';el.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';document.body.appendChild(el)}
+  el.style.background=result.pass?'#e9f8ee':'#fff0f0';el.style.color=result.pass?'#176b36':'#9b1c1c';
+  el.dataset.result=result.pass?'pass':'fail';el.dataset.qa=JSON.stringify(result);
+  el.textContent=result.pass?'JK STICKER STEP 6 · PASS · store + search + preview24':'JK STICKER STEP 6 · FAIL';
+}
+
 function styleTrigger(){
   const b=q('#expressionBtnV28');if(!b)return;b.classList.add('jk104-trigger');
   b.setAttribute('aria-label','สติ๊กเกอร์');b.setAttribute('title','สติ๊กเกอร์');
@@ -307,9 +401,9 @@ document.addEventListener('click',e=>{
   e.preventDefault();e.stopImmediatePropagation();open();
 },true);
 let queued=false;
-const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger();runQa();runStep5Qa()})};
+const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger();runQa();runStep5Qa();runStep6Qa()})};
 new MutationObserver(hydrate).observe(document.documentElement,{childList:true,subtree:true});
-document.addEventListener('DOMContentLoaded',()=>{styleTrigger();runQa();runStep5Qa()});setTimeout(()=>{styleTrigger();runQa();runStep5Qa()},150);setTimeout(()=>{styleTrigger();runQa();runStep5Qa()},700);setTimeout(runQa,1400);setTimeout(runStep5Qa,1400);
+document.addEventListener('DOMContentLoaded',()=>{styleTrigger();runQa();runStep5Qa();runStep6Qa()});setTimeout(()=>{styleTrigger();runQa();runStep5Qa();runStep6Qa()},150);setTimeout(()=>{styleTrigger();runQa();runStep5Qa();runStep6Qa()},700);setTimeout(runQa,1400);setTimeout(runStep5Qa,1400);setTimeout(runStep6Qa,1400);
 async function openMinePack(packId=''){
   const br=bridge();
   if(!br?.activeMatch?.())return br?.toast?.('เลือกห้องคุยก่อนใช้สติ๊กเกอร์');
