@@ -166,6 +166,48 @@ let queued=false;
 const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger()})};
 new MutationObserver(hydrate).observe(document.documentElement,{childList:true,subtree:true});
 document.addEventListener('DOMContentLoaded',styleTrigger);
-setTimeout(styleTrigger,150);setTimeout(styleTrigger,700);
-window.JKStickerPickerV103={open,close};
+setTimeout(styleTrigger,150);setTimeout(styleTrigger,700);setTimeout(runQa,900);setTimeout(runQa,1600);
+
+async function runQa(){
+  const params=new URLSearchParams(location.search);
+  if(params.get('pickerQa')!=='1')return;
+  if(window.__JK_PICKER_QA_RUNNING)return;
+  const bridge=window.JKStickerBridgeV77;
+  if(!bridge?.activeMatch?.())return;
+  const a=api();
+  if(!a)return;
+  window.__JK_PICKER_QA_RUNNING=1;
+  const result={step:'start',pass:false,at:new Date().toISOString()};
+  try{
+    catalog=await a.getCatalog();
+    const pack=catalog.find(owned)||catalog[0];
+    const item=pack?.items?.[0];
+    if(!pack||!item)throw new Error('no_sticker');
+    result.pack_id=pack.pack_id;
+    result.sticker_key=item.sticker_key;
+    result.step='send';
+    const ok=await a.sendByKey(pack.pack_id,item.sticker_key);
+    if(!ok)throw new Error('send_failed');
+    remember(pack.pack_id,item.sticker_key);
+    const first=recent()[0]||'';
+    result.recent_first=first;
+    result.pass=first===(pack.pack_id+'|'+item.sticker_key);
+    result.step=result.pass?'passed':'recent_mismatch';
+  }catch(err){
+    result.error=String(err?.message||err);
+    result.step='failed';
+  }
+  window.JK_STICKER_PICKER_QA_RESULT=result;
+  let badge=document.getElementById('jkPickerQaBadge');
+  if(!badge){
+    badge=document.createElement('div');
+    badge.id='jkPickerQaBadge';
+    badge.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147483647;padding:9px 13px;border-radius:999px;font:800 12px system-ui;background:#fff;border:1px solid #eadfe2;box-shadow:0 6px 20px rgba(0,0,0,.12);color:#24191d';
+    document.body.appendChild(badge);
+  }
+  badge.textContent=result.pass?'STICKER PICKER QA · PASS':'STICKER PICKER QA · FAIL · '+result.step;
+  badge.dataset.qa=JSON.stringify(result);
+}
+
+window.JKStickerPickerV103={open,close ,runQa};
 })();
