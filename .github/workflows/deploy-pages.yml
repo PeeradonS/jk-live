@@ -38,6 +38,9 @@ jobs:
             https://jk-jerkan-preview.netlify.app/ || test -f mirror/jk-jerkan-preview.netlify.app/index.html
           cp -R mirror/jk-jerkan-preview.netlify.app/. site/
           rm -rf site/.netlify
+          if [ -f source/index.html ]; then
+            cp source/index.html site/index.html
+          fi
 
       - name: Apply latest JK production patches
         run: |
@@ -141,6 +144,13 @@ jobs:
           grep -q "JK STICKER STEP 8 OFF · PASS · disabled + honest state" /tmp/jk-store-v105-step8-off-qa.html
 
           echo "Sticker Store v105 browser QA PASS · STEP 6 + STEP 7 + STEP 8"
+
+          "$CHROME" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=6000 \
+            --dump-dom "http://127.0.0.1:8765/?preview=1&stickerQaStep9=1" \
+            >/tmp/jk-sticker-step9-qa.html
+          grep -q "JK STICKER STEP 9 · PASS · long press + reply + favorite + resend" /tmp/jk-sticker-step9-qa.html
+          echo "Sticker interaction browser QA PASS · STEP 9"
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
