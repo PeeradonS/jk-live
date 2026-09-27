@@ -26,6 +26,7 @@ jobs:
           node --check patches/jk-sticker-renderer-v101.js
           node --check patches/jk-sticker-picker-v104.js
           node --check patches/jk-sticker-store-v105.js
+          node --check patches/jk-sticker-interactions-v106.js
           node --check patches/sticker-v77.js
 
       - name: Mirror current public JK production
@@ -57,7 +58,7 @@ jobs:
 
           s = re.sub(r'<iframe[^>]+(?:netlify|\.netlify)[^>]*>.*?</iframe>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script[^>]+src=["\'][^"\']*(?:netlify|\.netlify)[^"\']*["\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
-          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.3"')
+          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.4"')
 
           head_assets = [
               ('sticker-shop-v62.css', '<link rel="stylesheet" href="./patches/sticker-shop-v62.css">'),
@@ -143,7 +144,16 @@ jobs:
             >/tmp/jk-store-v105-step8-off-qa.html
           grep -q "JK STICKER STEP 8 OFF · PASS · disabled + honest state" /tmp/jk-store-v105-step8-off-qa.html
 
-          echo "Sticker Store v105 browser QA PASS · STEP 6 + STEP 7 + STEP 8"
+          grep -q "data-sticker-key" site/patches/sticker-v77.js
+          grep -q "wrap.setAttribute('data-sticker-key'" site/patches/jk-sticker-renderer-v101.js
+
+          "$CHROME" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=3500 \
+            --dump-dom "http://127.0.0.1:8765/tests/sticker-interactions-v106-qa.html?stickerQaStep9=1" \
+            >/tmp/jk-sticker-step9-qa.html
+          grep -q "JK STICKER STEP 9 · PASS · existing long press + reply + favorite + resend" /tmp/jk-sticker-step9-qa.html
+
+          echo "Sticker Store v105 browser QA PASS · STEP 6 + STEP 7 + STEP 8 + STEP 9"
 
           "$CHROME" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
             --virtual-time-budget=6000 \
