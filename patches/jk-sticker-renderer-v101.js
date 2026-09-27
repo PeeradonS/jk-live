@@ -56,6 +56,16 @@ function upgradeWrap(wrap){
     const stickerPack=asset.getAttribute('data-sticker-pack')||'';
     if(stickerKey)wrap.setAttribute('data-sticker-key',stickerKey);
     if(stickerPack)wrap.setAttribute('data-sticker-pack',stickerPack);
+    if(asset.tagName==='IMG'&&asset.dataset.jkStickerErrorBound!=='1'){
+      asset.dataset.jkStickerErrorBound='1';
+      asset.addEventListener('error',()=>{
+        if(asset.dataset.jkStickerFallback==='1')return;
+        asset.dataset.jkStickerFallback='1';
+        const caption=asset.getAttribute('alt')||'สติ๊กเกอร์ JK';
+        asset.src=fallbackSvg('✦',caption);
+        asset.classList.add('jk-sticker-fallback-v101');
+      });
+    }
     asset.classList.add('jk-sticker-art-v101');
     const parent=asset.closest('[class*="sticker-bubble"]');
     if(parent)parent.classList.add('jk-sticker-host-v101');
