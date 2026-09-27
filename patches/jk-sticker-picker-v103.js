@@ -64,21 +64,29 @@ function setTab(tab){
   if(!overlay)return;
   qa('[data-jk103-tab]',overlay).forEach(b=>b.classList.toggle('active',b.dataset.jk103Tab===tab));
 }
+async function sendAndRemember(packId,key,button=null){
+  if(busy)return false;
+  busy=true;
+  button?.classList.add('sending');
+  try{
+    const ok=await api()?.sendByKey?.(packId,key);
+    if(ok){
+      remember(packId,key);
+      button?.classList.add('sent');
+      if(button)setTimeout(()=>button.classList.remove('sent'),500);
+      return true;
+    }
+    return false;
+  }finally{
+    busy=false;
+    button?.classList.remove('sending');
+  }
+}
 function bindStickerSends(root){
   qa('[data-jk103-send]',root).forEach(b=>b.onclick=async()=>{
-    if(busy)return;
     const raw=b.dataset.jk103Send||'',i=raw.indexOf('|');
     if(i<0)return;
-    const packId=raw.slice(0,i),key=raw.slice(i+1);
-    busy=true;b.classList.add('sending');
-    try{
-      const ok=await api()?.sendByKey?.(packId,key);
-      if(ok){
-        remember(packId,key);
-        b.classList.add('sent');
-        setTimeout(()=>b.classList.remove('sent'),500);
-      }
-    }finally{busy=false;b.classList.remove('sending')}
+    await sendAndRemember(raw.slice(0,i),raw.slice(i+1),b);
   });
 }
 function renderRecent(){
@@ -148,6 +156,40 @@ async function open(){
   finally{busy=false}
 }
 
+
+const QA_RUN=new URLSearchParams(location.search).get('pickerQaRun')==='1';
+let qaRan=false;
+function showQaStatus(ok,detail){
+  let el=q('#jk103QaStatus');
+  if(!el){
+    el=document.createElement('div');
+    el.id='jk103QaStatus';
+    el.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;background:'+(ok?'#e9f8ee':'#fff0f0')+';color:'+(ok?'#176b36':'#9b1c1c')+';font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';
+    document.body.appendChild(el);
+  }
+  el.dataset.result=ok?'pass':'fail';
+  el.textContent=(ok?'STICKER PICKER QA PASS · ':'STICKER PICKER QA FAIL · ')+detail;
+}
+async function runQa(){
+  if(!QA_RUN||qaRan)return;
+  const bridge=window.JKStickerBridgeV77;
+  if(!bridge?.preview||!bridge?.activeMatch?.())return;
+  const a=api(); if(!a)return;
+  qaRan=true;
+  try{
+    const packs=await a.getCatalog();
+    const pack=packs.find(owned)||packs[0];
+    const item=pack?.items?.[0];
+    if(!pack||!item)throw new Error('no sticker available');
+    const ok=await sendAndRemember(pack.pack_id,item.sticker_key);
+    const first=recent()[0]||'';
+    const expected=pack.pack_id+'|'+item.sticker_key;
+    showQaStatus(!!ok&&first===expected,'sent='+!!ok+' · recentFirst='+(first===expected)+' · '+expected);
+  }catch(err){
+    showQaStatus(false,String(err?.message||err));
+  }
+}
+
 function styleTrigger(){
   const b=q('#expressionBtnV28');if(!b)return;
   b.classList.add('jk103-trigger');b.setAttribute('aria-label','สติ๊กเกอร์');b.setAttribute('title','สติ๊กเกอร์');
@@ -163,10 +205,10 @@ document.addEventListener('click',e=>{
 },true);
 
 let queued=false;
-const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger()})};
+const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger();runQa()})};
 new MutationObserver(hydrate).observe(document.documentElement,{childList:true,subtree:true});
-document.addEventListener('DOMContentLoaded',styleTrigger);
-setTimeout(styleTrigger,150);setTimeout(styleTrigger,700);setTimeout(runQa,900);setTimeout(runQa,1600);
+document.addEventListener('DOMContentLoaded',()=>{styleTrigger();runQa()});
+setTimeout(()=>{styleTrigger();runQa()},150);setTimeout(()=>{styleTrigger();runQa()},700);setTimeout(runQa,1400);setTimeout(runQa,900);setTimeout(runQa,1600);
 
 async function runQa(){
   const params=new URLSearchParams(location.search);
