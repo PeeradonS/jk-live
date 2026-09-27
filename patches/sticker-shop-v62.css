@@ -1,0 +1,73 @@
+/* Thai text needs room for tone marks and wrapping. */
+.listen-hero-v49 h1 {
+  font-size: clamp(27px, 7vw, 34px);
+  line-height: 1.42;
+  letter-spacing: 0 !important;
+  margin: 12px 0 16px;
+}
+.listen-hero-v49 { padding: 26px 22px; }
+.listen-hero-v49 small { font-size: 12px; line-height: 1.7; letter-spacing: 0 !important; }
+.listen-hero-v49 p { font-size: 14px; line-height: 1.85; }
+.listen-fast-v49 { gap: 12px; margin: 18px 0; }
+.listen-fast-v49 button { padding: 17px 13px; gap: 10px; min-height: 156px; }
+.listen-fast-v49 b { font-size: 14px; line-height: 1.65; }
+.listen-fast-v49 small { font-size: 12px; line-height: 1.7; }
+.listen-privacy-v49 { font-size: 12px; line-height: 1.8; padding: 14px 16px; }
+.listen-section-v49 .head h2,
+.listen-featured-v49 h3,
+.listen-story-card-v49 h3 { line-height: 1.55; letter-spacing: 0 !important; }
+.listen-featured-v49 p,
+.listen-detail-v49 .story-body,
+.listen-response-v49 p { font-size: 14px; line-height: 1.85; }
+.jk-sticker-image-v62 { display: block; width: 104px; height: 120px; object-fit: contain; margin: auto; }
+.jk-sticker-image-v62.shop { width: 70px; height: 80px; }
+.jk-sticker-image-v62.bubble { width: 184px; height: 200px; }
+.jk-sticker-bubble-v60:has(.jk-sticker-image-v62) { width: 192px; max-width: 100%; padding: 5px; }
+.jk-sticker-bubble-v60:has(.jk-sticker-image-v62) > b { display: none; }
+.jk-shop-grid-v48 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.jk-shop-card-v48 { min-width: 0; padding: 14px; height: auto; }
+.jk-shop-card-v48 b { display: block; font-size: 15px; line-height: 1.65; letter-spacing: 0; overflow-wrap: anywhere; }
+.jk-shop-card-v48 small,
+.jk-shop-card-v48 .jk-pack-count-v60 { display: block; font-size: 12px; line-height: 1.7; margin-top: 7px; }
+.jk-shop-card-v48 .visual { flex-wrap: wrap; gap: 4px; }
+.jk-shop-v60-note { font-size: 12px; line-height: 1.8; padding: 14px; }
+.jk-direct-sticker-v61 .head small { font-size: 13px; line-height: 1.7; }
+.jk-direct-sticker-v61 .jk-sticker-grid-v48,
+.jk-real-preview-v61 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.jk-sticker-v48 { min-width: 0; }
+.jk-sticker-v48 b { font-size: 12px; line-height: 1.65; margin-top: 5px; }
+.jk-sticker-v48 .jk-sticker-image-v62 { max-width: 100%; }
+.jk-pack-tabs-v48 { display: flex; gap: 8px; overflow-x: auto; padding: 6px 0 12px; }
+.jk-pack-tabs-v48 button { flex: 0 0 auto; font-size: 13px; line-height: 1.65; padding: 10px 14px; min-height: 44px; }
+.jk-direct-sticker-v61 .store-row { flex-wrap: wrap; gap: 10px; }
+.jk-direct-sticker-v61 .store-row .btn { min-width: 130px; line-height: 1.65; }
+.jk-shop-search-v62 { display: grid; gap: 9px; margin: 15px 0; }
+.jk-shop-search-v62 input { width: 100%; padding: 12px 14px; border: 1px solid #dfcbd2; border-radius: 14px; font: inherit; font-size: 16px; }
+.jk-shop-search-v62 label { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.jk-shop-search-v62 input[type=checkbox] { width: 20px; height: 20px; }
+.jk-shop-count-v62 { font-size: 13px; line-height: 1.7; margin: 8px 0; color: #75545f; }
+@media (max-width: 400px) {
+  .listen-fast-v49 { grid-template-columns: 1fr; }
+  .listen-fast-v49 button { min-height: 90px; display: grid; grid-template-columns: 38px 1fr; column-gap: 12px; row-gap: 5px; }
+  .listen-fast-v49 i { grid-row: 1 / 3; align-self: center; margin: 0; }
+  .jk-shop-grid-v48 { grid-template-columns: 1fr; }
+  .jk-direct-sticker-v61 .jk-sticker-grid-v48,
+  .jk-real-preview-v61 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* v0.63: large artwork previews and comfortably sized controls. */
+.jk-sticker-detail-v63 { display: grid; place-items: center; padding: 20px 8px; min-height: 280px; background: #faf7f8; border-radius: 20px; margin: 16px 0; }
+.jk-sticker-detail-v63 .jk-sticker-image-v62,
+.jk-sticker-detail-v63 .jk-sticker-art-v61 { width: min(280px, 75vw); height: 300px; object-fit: contain; }
+.jk-sticker-pager-v63 { display: flex; gap: 12px; margin: 16px 0; }
+.jk-sticker-pager-v63 > button { flex: 1; min-height: 48px; line-height: 1.65; white-space: normal; }
+.jk-shop-back-v63 { margin: 12px 0; min-height: 44px; }
+.jk-direct-sticker-v61 .head { display: flex; align-items: flex-start; gap: 16px; }
+.jk-direct-sticker-v61 .head > div { min-width: 0; flex: 1; }
+.jk-direct-sticker-v61 .head h3 { line-height: 1.55; margin: 0 0 6px; }
+.jk-direct-sticker-v61 .head small { display: block; }
+.jk-direct-sticker-v61 .close { flex: 0 0 44px; width: 44px; height: 44px; }
+.jk-sticker-pager-v63 button:disabled { opacity: .4; cursor: default; }
+.jk-shop-tabs-v48 { gap: 8px; padding-block: 8px; }
+.jk-shop-tabs-v48 button { min-height: 44px; padding: 10px 14px; line-height: 1.6; }
+#stickerSendV63, #stickerBackV63 { min-height: 48px; margin-top: 12px; line-height: 1.65; }
