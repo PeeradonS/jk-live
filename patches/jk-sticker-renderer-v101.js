@@ -45,6 +45,13 @@ function upgradeWrap(wrap){
   wrap.classList.add('jk-sticker-message-v101');
 
   if(asset){
+    const src=asset.getAttribute('src')||'';
+    const m=/\/resources\/stickers\/bad-boy-24\/(\d{2})\.png(?:$|[?#])/.exec(src);
+    if(m){
+      asset.setAttribute('src','./resources/stickers/standardized/bad-boy/'+m[1]+'.png');
+      asset.setAttribute('width','512');
+      asset.setAttribute('height','512');
+    }
     asset.classList.add('jk-sticker-art-v101');
     const parent=asset.closest('[class*="sticker-bubble"]');
     if(parent)parent.classList.add('jk-sticker-host-v101');
