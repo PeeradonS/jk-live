@@ -185,21 +185,46 @@ async function runQa(){
   if(!br?.preview||!br?.activeMatch?.())return;
   const a=api();if(!a)return;
   qaRan=true;
-  const result={pass:false,sent:false,recentFirst:false};
+  const result={pass:false,apiSend:false,bridgeSend:false,recentFirst:false};
   try{
+    result.activeBefore=!!br.activeMatch?.();
     const packs=await a.getCatalog();
+    result.activeAfterCatalog=!!br.activeMatch?.();
     const pack=packs.find(owned)||packs[0];
     const item=pack?.items?.[0];
     if(!pack||!item)throw new Error('no_sticker');
     result.key=id(pack.pack_id,item.sticker_key);
-    result.sent=await sendAndRemember(pack.pack_id,item.sticker_key);
+    result.packOwned=owned(pack);
+    result.busyBefore=busy;
+    result.apiSend=!!(await a.sendByKey(pack.pack_id,item.sticker_key));
+    result.activeAfterApiSend=!!br.activeMatch?.();
+    if(result.apiSend){
+      remember(pack.pack_id,item.sticker_key);
+    }else{
+      result.bridgeSend=!!(await br.send?.(pack,item));
+      if(result.bridgeSend)remember(pack.pack_id,item.sticker_key);
+    }
     result.recentFirst=recent()[0]===result.key;
-    result.pass=result.sent&&result.recentFirst;
+    result.pass=(result.apiSend||result.bridgeSend)&&result.recentFirst;
   }catch(err){
     result.error=String(err?.message||err);
   }
   window.JK_STICKER_PICKER_V104_QA=result;
-  showQa(result);
+  let el=q('#jk104QaStatus');
+  if(!el){
+    el=document.createElement('div');
+    el.id='jk104QaStatus';
+    el.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';
+    document.body.appendChild(el);
+  }
+  el.style.background=result.pass?'#e9f8ee':'#fff0f0';
+  el.style.color=result.pass?'#176b36':'#9b1c1c';
+  el.dataset.result=result.pass?'pass':'fail';
+  el.dataset.qa=JSON.stringify(result);
+  el.textContent=(result.pass?'STICKER PICKER V104 QA PASS · ':'STICKER PICKER V104 QA FAIL · ')+
+    'api='+result.apiSend+' · bridge='+result.bridgeSend+' · recent='+result.recentFirst+
+    ' · activeBefore='+result.activeBefore+' · activeAfterCatalog='+result.activeAfterCatalog+
+    ' · owned='+result.packOwned+' · busy='+result.busyBefore;
 }
 
 function styleTrigger(){
