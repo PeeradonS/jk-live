@@ -77,14 +77,26 @@ function setTab(tab){
   activeTab=tab;if(!overlay)return;
   qa('[data-jk104-tab]',overlay).forEach(b=>b.classList.toggle('active',b.dataset.jk104Tab===tab));
 }
+async function sendAndRemember(packId,key,button=null){
+  if(busy)return false;
+  busy=true;button?.classList.add('sending');
+  try{
+    const ok=await api()?.sendByKey?.(packId,key);
+    if(ok){
+      remember(packId,key);
+      button?.classList.add('sent');
+      if(button)setTimeout(()=>button.classList.remove('sent'),450);
+      return true;
+    }
+    return false;
+  }finally{
+    busy=false;button?.classList.remove('sending');
+  }
+}
 function bindTiles(root){
   qa('[data-jk104-send]',root).forEach(b=>b.onclick=async()=>{
-    if(busy)return;const raw=b.dataset.jk104Send||'',i=raw.indexOf('|');if(i<0)return;
-    const packId=raw.slice(0,i),key=raw.slice(i+1);busy=true;b.classList.add('sending');
-    try{
-      const ok=await api()?.sendByKey?.(packId,key);
-      if(ok){remember(packId,key);b.classList.add('sent');setTimeout(()=>b.classList.remove('sent'),450)}
-    }finally{busy=false;b.classList.remove('sending')}
+    const raw=b.dataset.jk104Send||'',i=raw.indexOf('|');if(i<0)return;
+    await sendAndRemember(raw.slice(0,i),raw.slice(i+1),b);
   });
   qa('[data-jk104-fav]',root).forEach(b=>b.onclick=e=>{
     e.preventDefault();e.stopPropagation();
@@ -186,6 +198,48 @@ async function runQa(){
     result.pass=result.sent&&result.recentFirst;
     if(!result.pass)result.info='sent='+result.sent+' recentFirst='+result.recentFirst;
   }catch(err){result.info=String(err?.message||err)}
+  window.JK_STICKER_PICKER_V104_QA=result;
+  showQa(result);
+}
+
+
+const QA_RUN=(()=>{
+  const p=new URLSearchParams(location.search);
+  return p.get('pickerQaRun')==='1'||p.get('pickerQa104')==='1';
+})();
+let qaRan=false;
+function showQa(result){
+  let el=q('#jk104QaStatus');
+  if(!el){
+    el=document.createElement('div');
+    el.id='jk104QaStatus';
+    el.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';
+    document.body.appendChild(el);
+  }
+  el.style.background=result.pass?'#e9f8ee':'#fff0f0';
+  el.style.color=result.pass?'#176b36':'#9b1c1c';
+  el.dataset.result=result.pass?'pass':'fail';
+  el.dataset.qa=JSON.stringify(result);
+  el.textContent=(result.pass?'STICKER PICKER V104 QA PASS · ':'STICKER PICKER V104 QA FAIL · ')+
+    'sent='+!!result.sent+' · recentFirst='+!!result.recentFirst+' · '+(result.key||result.error||'');
+}
+async function runQa(){
+  if(!QA_RUN||qaRan)return;
+  const br=bridge();
+  if(!br?.preview||!br?.activeMatch?.())return;
+  const a=api();if(!a)return;
+  qaRan=true;
+  const result={pass:false,sent:false,recentFirst:false};
+  try{
+    const packs=await a.getCatalog();
+    const pack=packs.find(owned)||packs[0];
+    const item=pack?.items?.[0];
+    if(!pack||!item)throw new Error('no_sticker');
+    result.key=id(pack.pack_id,item.sticker_key);
+    result.sent=await sendAndRemember(pack.pack_id,item.sticker_key);
+    result.recentFirst=recent()[0]===result.key;
+    result.pass=result.sent&&result.recentFirst;
+  }catch(err){result.error=String(err?.message||err)}
   window.JK_STICKER_PICKER_V104_QA=result;
   showQa(result);
 }
