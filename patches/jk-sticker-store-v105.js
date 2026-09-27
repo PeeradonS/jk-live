@@ -164,5 +164,13 @@ async function runQa(){
 if(QA)qaBadge('JK STICKER STEP 6 · CHECKING');
 document.addEventListener('DOMContentLoaded',()=>setTimeout(runQa,120));
 setTimeout(runQa,180);
-window.JKStickerStoreV105={open,close,renderBrowse,renderDetail};
+document.addEventListener('click',e=>{
+  const tab=e.target.closest?.('[data-jk104-tab="store"]');
+  if(!tab)return;
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  window.JKStickerPickerV104?.close?.();
+  open();
+},true);
+window.JKStickerStoreV105={open,close,renderBrowse,renderDetail,runQa};
 })();
