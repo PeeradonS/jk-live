@@ -146,6 +146,50 @@ async function open(){
   }catch{br?.toast?.('เปิดสติ๊กเกอร์ไม่สำเร็จ ลองอีกครั้ง')}
   finally{busy=false}
 }
+
+const QA_RUN=new URLSearchParams(location.search).get('pickerQa')==='1';
+let qaRan=false;
+function showQa(result){
+  let el=q('#jk104QaStatus');
+  if(!el){
+    el=document.createElement('div');
+    el.id='jk104QaStatus';
+    el.style.cssText='position:fixed;left:10px;right:10px;top:10px;z-index:2147483647;padding:12px 14px;border-radius:14px;font:800 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.14)';
+    document.body.appendChild(el);
+  }
+  el.style.background=result.pass?'#e9f8ee':'#fff4e5';
+  el.style.color=result.pass?'#176b36':'#7b4a00';
+  el.dataset.result=result.pass?'pass':'wait';
+  el.dataset.qa=JSON.stringify(result);
+  el.textContent=result.pass
+    ? 'JK STICKER STEP 4 · PASS · send + recent'
+    : 'JK STICKER STEP 4 · WAIT · '+(result.info||'');
+}
+async function runQa(){
+  if(!QA_RUN||qaRan)return;
+  const br=bridge(),a=api(),hasMatch=!!br?.activeMatch?.();
+  if(!br?.preview||!hasMatch||!a){
+    showQa({pass:false,info:'preview='+!!br?.preview+' match='+hasMatch+' api='+!!a});
+    return;
+  }
+  qaRan=true;
+  const result={pass:false,sent:false,recentFirst:false};
+  try{
+    catalog=await a.getCatalog();
+    const pack=catalog.find(owned)||catalog[0];
+    const item=pack?.items?.[0];
+    if(!pack||!item)throw new Error('no_sticker');
+    result.key=id(pack.pack_id,item.sticker_key);
+    result.sent=!!(await a.sendByKey(pack.pack_id,item.sticker_key));
+    if(result.sent)remember(pack.pack_id,item.sticker_key);
+    result.recentFirst=recent()[0]===result.key;
+    result.pass=result.sent&&result.recentFirst;
+    if(!result.pass)result.info='sent='+result.sent+' recentFirst='+result.recentFirst;
+  }catch(err){result.info=String(err?.message||err)}
+  window.JK_STICKER_PICKER_V104_QA=result;
+  showQa(result);
+}
+
 function styleTrigger(){
   const b=q('#expressionBtnV28');if(!b)return;b.classList.add('jk104-trigger');
   b.setAttribute('aria-label','สติ๊กเกอร์');b.setAttribute('title','สติ๊กเกอร์');
@@ -159,8 +203,8 @@ document.addEventListener('click',e=>{
   e.preventDefault();e.stopImmediatePropagation();open();
 },true);
 let queued=false;
-const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger()})};
+const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger();runQa()})};
 new MutationObserver(hydrate).observe(document.documentElement,{childList:true,subtree:true});
-document.addEventListener('DOMContentLoaded',styleTrigger);setTimeout(styleTrigger,150);setTimeout(styleTrigger,700);
-window.JKStickerPickerV104={open,close,toggleFav,favorites,recent,usage};
+document.addEventListener('DOMContentLoaded',()=>{styleTrigger();runQa()});setTimeout(()=>{styleTrigger();runQa()},150);setTimeout(()=>{styleTrigger();runQa()},700);setTimeout(runQa,1400);
+window.JKStickerPickerV104={open,close,toggleFav,favorites,recent,usage,runQa};
 })();
