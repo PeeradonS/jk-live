@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JK Sticker STEP 12 Art Readiness QA</title>
+<link rel="stylesheet" href="../patches/jk-sticker-store-v105.css">
+</head>
+<body>
+<script>
+localStorage.removeItem('jk_v77_sticker_owned_preview');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+window.JKStickerBridgeV77={
+  preview:true,
+  activeMatch:()=>({id:'qa-room'}),
+  toast:()=>{},
+  refresh:()=>{},
+  escape:esc,
+  showModal:()=>{},
+  root:()=>document.body,
+  send:async()=>true,
+  purchase:async()=>false
+};
+window.JKStickerPickerV104={close(){},openMinePack:async()=>true};
+</script>
+<script src="../patches/sticker-v77.js"></script>
+<script src="../patches/jk-sticker-store-v105.js"></script>
+<script>
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{
+  if(new URLSearchParams(location.search).get('stickerQaStep12')!=='1')return;
+  for(let i=0;i<50&&!window.JKStickerV77?.ready;i++)await sleep(80);
+  const packs=await window.JKStickerV77.getCatalog();
+  const production=packs.find(p=>p.pack_id==='v62_31');
+  const fallback=packs.find(p=>p.pack_id==='v62_02');
+  const prodReady=production?.art_status==='production'&&production?.sale_ready===true&&production?.real_asset_count===24;
+  const fallbackLocked=fallback?.art_status==='runtime_fallback'&&fallback?.sale_ready===false&&fallback?.real_asset_count===0;
+  const fallbackPurchase=await window.JKStickerV77.startPurchaseByPackId('v62_02');
+  const prodPurchase=await window.JKStickerV77.startPurchaseByPackId('v62_31');
+  await window.JKStickerStoreV105.open();
+  window.JKStickerStoreV105.renderDetail('v62_02');
+  const fallbackButton=document.querySelector('#jk105Buy');
+  const fallbackUi=!!fallbackButton&&fallbackButton.disabled&&fallbackButton.textContent.includes('กำลังปรับงานภาพ');
+  window.JKStickerStoreV105.renderDetail('v62_31');
+  const prodButton=document.querySelector('#jk105Buy');
+  const prodUi=!!prodButton&&prodButton.disabled&&prodButton.textContent.includes('ยังไม่เปิดชำระเงินจริง');
+  const pass=packs.length===50&&prodReady&&fallbackLocked&&fallbackPurchase?.error==='art_not_ready'&&prodPurchase?.error==='preview_payment_disabled'&&fallbackUi&&prodUi;
+  const badge=document.createElement('div');
+  badge.id='jkStep12Qa';
+  badge.textContent=pass
+    ?'JK STICKER STEP 12 · PASS · 50 packs + art readiness + unfinished sale lock'
+    :'JK STICKER STEP 12 · FAIL · packs='+packs.length+' prod='+prodReady+' fallback='+fallbackLocked+' fp='+fallbackPurchase?.error+' pp='+prodPurchase?.error+' fui='+fallbackUi+' pui='+prodUi;
+  document.body.prepend(badge);
+})();
+</script>
+</body>
+</html>
