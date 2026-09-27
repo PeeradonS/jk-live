@@ -380,9 +380,13 @@
   }
 
   async function send(pack,item) {
-    if (!packOwned(pack)) return openPack(pack.pack_id,'store');
+    if (!packOwned(pack)) {
+      openPack(pack.pack_id,'store');
+      return false;
+    }
     const ok=await bridge.send(pack,item);
     if (ok) bridge.toast('ส่ง ' + item.caption_th + ' แล้ว');
+    return !!ok;
   }
 
   window.JKStickerV77 = {
