@@ -105,6 +105,24 @@ jobs:
           PY
           touch site/.nojekyll
 
+      - name: Browser QA Sticker Store v105
+        run: |
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME" ]; then
+            echo "No Chrome/Chromium found on runner"
+            exit 1
+          fi
+          python3 -m http.server 8765 >/tmp/jk-store-qa-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 1
+          "$CHROME" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=5000 \
+            --dump-dom "http://127.0.0.1:8765/tests/sticker-store-v105-qa.html?storeQaStep6=1" \
+            >/tmp/jk-store-v105-qa.html
+          grep -q "JK STICKER STEP 6 · PASS · browse + search + category + 24 preview" /tmp/jk-store-v105-qa.html
+          echo "Sticker Store v105 browser QA PASS"
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
