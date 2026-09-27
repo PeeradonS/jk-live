@@ -57,14 +57,12 @@ jobs:
               ('jk-live-ux-v91.css', '<link rel="stylesheet" href="./patches/jk-live-ux-v91.css">'),
               ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
               ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
-              ('jk-sticker-pro-v100.css', '<link rel="stylesheet" href="./patches/jk-sticker-pro-v100.css?v=100.0">'),
           ]
           body_assets = [
               ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
               ('jk-recovery-v90.js', '<script src="./patches/jk-recovery-v90.js"></script>'),
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
-              ('jk-sticker-pro-v100.js', '<script src="./patches/jk-sticker-pro-v100.js?v=100.0"></script>'),
           ]
 
           for key, tag in head_assets:
@@ -74,6 +72,16 @@ jobs:
           for key, tag in body_assets:
               if key not in s:
                   s = s.replace('</body>', tag + '\n</body>')
+
+          sticker_css = Path('site/patches/jk-sticker-pro-v100.css').read_text(encoding='utf-8')
+          sticker_js = Path('site/patches/jk-sticker-pro-v100.js').read_text(encoding='utf-8')
+          s = re.sub(r'<style id="jk-sticker-pro-v100">.*?</style>', '', s, flags=re.I|re.S)
+          s = re.sub(r'<script id="jk-sticker-pro-v100">.*?</script>', '', s, flags=re.I|re.S)
+          s = s.replace('</head>', '<style id="jk-sticker-pro-v100">' + sticker_css + '</style>\n</head>')
+          s = s.replace('</body>', '<script id="jk-sticker-pro-v100">' + sticker_js.replace('</script>', '<\\/script>') + '</script>\n</body>')
+
+          if 'JK_STICKER_PRO_V100' not in s:
+              raise SystemExit('Sticker Pro v100 was not embedded into production HTML')
 
           p.write_text(s, encoding='utf-8')
           PY
