@@ -28,3 +28,8 @@
 .jk105-fallback{font-weight:950;color:#c91f3b}
 @media(max-width:390px){.jk105-grid{gap:8px}.jk105-card{padding:7px}.jk105-cover{height:112px}.jk105-preview-grid{gap:5px 3px}.jk105-detail-cover{grid-template-columns:130px 1fr}.jk105-detail-cover .jk105-cover{height:130px}}
 @media(prefers-reduced-motion:reduce){.jk105-card,.jk105-cats button{transition:none!important}}
+.jk105-more{width:100%;height:46px;margin:12px 0 2px;border:1px solid #e7dce0;border-radius:15px;background:#fff;color:#5f4e54;font-size:11px;font-weight:900;box-shadow:0 4px 14px rgba(55,24,34,.03)}
+.jk105-more:active{transform:scale(.99)}
+.jk-v77-lazy-art{opacity:.04;transition:opacity .16s ease}
+.jk-v77-lazy-art.jk107-loaded{opacity:1}
+@media(prefers-reduced-motion:reduce){.jk-v77-lazy-art{transition:none!important}}
