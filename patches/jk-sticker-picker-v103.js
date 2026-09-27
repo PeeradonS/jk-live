@@ -157,18 +157,25 @@ async function open(){
 }
 
 
-const QA_RUN=new URLSearchParams(location.search).get('pickerQaRun')==='1';
+const QA_RUN=(()=>{
+  const p=new URLSearchParams(location.search);
+  return p.get('pickerQaRun')==='1'||p.get('pickerQa')==='1';
+})();
 let qaRan=false;
-function showQaStatus(ok,detail){
+function showQaStatus(result){
   let el=q('#jk103QaStatus');
   if(!el){
     el=document.createElement('div');
     el.id='jk103QaStatus';
-    el.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;background:'+(ok?'#e9f8ee':'#fff0f0')+';color:'+(ok?'#176b36':'#9b1c1c')+';font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';
+    el.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';
     document.body.appendChild(el);
   }
-  el.dataset.result=ok?'pass':'fail';
-  el.textContent=(ok?'STICKER PICKER QA PASS · ':'STICKER PICKER QA FAIL · ')+detail;
+  el.style.background=result.pass?'#e9f8ee':'#fff0f0';
+  el.style.color=result.pass?'#176b36':'#9b1c1c';
+  el.dataset.result=result.pass?'pass':'fail';
+  el.dataset.qa=JSON.stringify(result);
+  el.textContent=(result.pass?'STICKER PICKER QA PASS · ':'STICKER PICKER QA FAIL · ')+
+    'sent='+!!result.sent+' · recentFirst='+!!result.recent_first_match+' · '+(result.key||result.error||'');
 }
 async function runQa(){
   if(!QA_RUN||qaRan)return;
@@ -176,20 +183,22 @@ async function runQa(){
   if(!bridge?.preview||!bridge?.activeMatch?.())return;
   const a=api(); if(!a)return;
   qaRan=true;
+  const result={pass:false,sent:false,recent_first_match:false};
   try{
     const packs=await a.getCatalog();
     const pack=packs.find(owned)||packs[0];
     const item=pack?.items?.[0];
-    if(!pack||!item)throw new Error('no sticker available');
-    const ok=await sendAndRemember(pack.pack_id,item.sticker_key);
-    const first=recent()[0]||'';
-    const expected=pack.pack_id+'|'+item.sticker_key;
-    showQaStatus(!!ok&&first===expected,'sent='+!!ok+' · recentFirst='+(first===expected)+' · '+expected);
+    if(!pack||!item)throw new Error('no_sticker');
+    result.key=pack.pack_id+'|'+item.sticker_key;
+    result.sent=await sendAndRemember(pack.pack_id,item.sticker_key);
+    result.recent_first_match=recent()[0]===result.key;
+    result.pass=!!result.sent&&result.recent_first_match;
   }catch(err){
-    showQaStatus(false,String(err?.message||err));
+    result.error=String(err?.message||err);
   }
+  window.JK_STICKER_PICKER_QA_RESULT=result;
+  showQaStatus(result);
 }
-
 function styleTrigger(){
   const b=q('#expressionBtnV28');if(!b)return;
   b.classList.add('jk103-trigger');b.setAttribute('aria-label','สติ๊กเกอร์');b.setAttribute('title','สติ๊กเกอร์');
@@ -208,48 +217,7 @@ let queued=false;
 const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger();runQa()})};
 new MutationObserver(hydrate).observe(document.documentElement,{childList:true,subtree:true});
 document.addEventListener('DOMContentLoaded',()=>{styleTrigger();runQa()});
-setTimeout(()=>{styleTrigger();runQa()},150);setTimeout(()=>{styleTrigger();runQa()},700);setTimeout(runQa,1400);setTimeout(runQa,900);setTimeout(runQa,1600);
+setTimeout(()=>{styleTrigger();runQa()},150);setTimeout(()=>{styleTrigger();runQa()},700);setTimeout(runQa,1400);
 
-async function runQa(){
-  const params=new URLSearchParams(location.search);
-  if(params.get('pickerQa')!=='1')return;
-  if(window.__JK_PICKER_QA_RUNNING)return;
-  const bridge=window.JKStickerBridgeV77;
-  if(!bridge?.activeMatch?.())return;
-  const a=api();
-  if(!a)return;
-  window.__JK_PICKER_QA_RUNNING=1;
-  const result={step:'start',pass:false,at:new Date().toISOString()};
-  try{
-    catalog=await a.getCatalog();
-    const pack=catalog.find(owned)||catalog[0];
-    const item=pack?.items?.[0];
-    if(!pack||!item)throw new Error('no_sticker');
-    result.pack_id=pack.pack_id;
-    result.sticker_key=item.sticker_key;
-    result.step='send';
-    const ok=await a.sendByKey(pack.pack_id,item.sticker_key);
-    if(!ok)throw new Error('send_failed');
-    remember(pack.pack_id,item.sticker_key);
-    const first=recent()[0]||'';
-    result.recent_first=first;
-    result.pass=first===(pack.pack_id+'|'+item.sticker_key);
-    result.step=result.pass?'passed':'recent_mismatch';
-  }catch(err){
-    result.error=String(err?.message||err);
-    result.step='failed';
-  }
-  window.JK_STICKER_PICKER_QA_RESULT=result;
-  let badge=document.getElementById('jkPickerQaBadge');
-  if(!badge){
-    badge=document.createElement('div');
-    badge.id='jkPickerQaBadge';
-    badge.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147483647;padding:9px 13px;border-radius:999px;font:800 12px system-ui;background:#fff;border:1px solid #eadfe2;box-shadow:0 6px 20px rgba(0,0,0,.12);color:#24191d';
-    document.body.appendChild(badge);
-  }
-  badge.textContent=result.pass?'STICKER PICKER QA · PASS':'STICKER PICKER QA · FAIL · '+result.step;
-  badge.dataset.qa=JSON.stringify(result);
-}
-
-window.JKStickerPickerV103={open,close ,runQa};
+window.JKStickerPickerV103={open,close,runQa};
 })();
