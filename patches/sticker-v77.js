@@ -117,6 +117,17 @@
       paymentRoutes = result.payment_routes && typeof result.payment_routes === 'object' ? result.payment_routes : {};
       paymentReady = !!result.digital_payment_ready;
     }
+    packs = packs.map(pack => {
+      const realAssetCount=(pack.items||[]).filter(item=>!!item.asset_path && Number(item.export_size||512)===512).length;
+      const production=realAssetCount===24 && Number(pack.sticker_count||pack.items?.length||0)===24;
+      return {
+        ...pack,
+        real_asset_count:realAssetCount,
+        art_status:production?'production':'runtime_fallback',
+        sale_ready:production,
+        asset_standard:production?'JK-512-RGBA-v1':'JK-RUNTIME-v65'
+      };
+    });
     itemByKey.clear();
     packs.forEach(pack => (pack.items || []).forEach(item => itemByKey.set(item.sticker_key,{ item, pack })));
     ready = packs.length > 0;
@@ -290,6 +301,7 @@
     const pack=packs.find(p=>p.pack_id===packId);
     if(!pack) return { ok:false, error:'pack_not_found' };
     if(packOwned(pack)) return { ok:true, owned:true, pack_id:pack.pack_id };
+    if(!pack.sale_ready) return { ok:false, error:'art_not_ready', pack_id:pack.pack_id, art_status:pack.art_status };
     if(bridge.preview) return { ok:false, error:'preview_payment_disabled', platform:'preview' };
     const ps=paymentStatus();
     if(!ps.ready) return { ok:false, error:'payment_not_ready', platform:ps.platform, provider:ps.provider };
