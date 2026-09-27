@@ -53,6 +53,7 @@ jobs:
 
           s = re.sub(r'<iframe[^>]+(?:netlify|\.netlify)[^>]*>.*?</iframe>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script[^>]+src=["\'][^"\']*(?:netlify|\.netlify)[^"\']*["\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
+          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.1"')
 
           head_assets = [
               ('sticker-shop-v62.css', '<link rel="stylesheet" href="./patches/sticker-shop-v62.css">'),
@@ -67,7 +68,7 @@ jobs:
               ('jk-recovery-v90.js', '<script src="./patches/jk-recovery-v90.js"></script>'),
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
-              ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.3"></script>'),
+              ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.4"></script>'),
           ]
 
           for key, tag in head_assets:
