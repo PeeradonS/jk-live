@@ -36,3 +36,7 @@
 .jk103-fallback{font-weight:1000;color:#c91f3b}
 @media(max-width:380px){.jk103-sheet{height:min(72svh,650px)}.jk103-grid{gap:5px 3px}.jk103-body{padding-inline:9px}}
 @media(prefers-reduced-motion:reduce){.jk103-trigger,.jk103-sticker{transition:none!important}}
+
+/* Override legacy recovery icon hiding, sticker control only. */
+#expressionBtnV28.jk103-trigger svg{display:block!important}
+#expressionBtnV28.jk103-trigger::before{content:none!important;display:none!important}
