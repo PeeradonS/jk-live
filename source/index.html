@@ -26379,7 +26379,7 @@
         function runStickerInteractionQaV106() {
           if (new URLSearchParams(location.search).get('stickerQaStep9') !== '1') return;
           const run = () => {
-            if (!state?.user || !state?.messages) return setTimeout(run, 120);
+            if (!state?.user || !state?.messages || !window.JKStickerPickerV104?.toggleFav) return setTimeout(run, 120);
             const fake = { id:'jk-step9-qa', sender_id:state.user.id, message_type:'sticker', sticker_pack:'v62_31', sticker_key:'v65_v62_31_01', sticker_text:'หวัดดีครับ', body:'[Sticker] หวัดดีครับ', created_at:new Date().toISOString() };
             state.messages.push(fake);
             const was = isStickerFavoriteV106(fake);
