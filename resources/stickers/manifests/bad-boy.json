@@ -1,0 +1,851 @@
+{
+  "schema_version": "1.0",
+  "pack_id": "bad-boy",
+  "title": "Bad Boy",
+  "category": "men",
+  "sticker_count": 24,
+  "asset_standard": "JK-512-RGBA-v1",
+  "validation_pass": true,
+  "items": [
+    {
+      "index": 1,
+      "sticker_key": "bad-boy-01",
+      "caption_th": "หวัดดีครับ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/01.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "0988d3f7c9549dd6cf27b7e7a8e2e259c361cb113caefd99acda9f48db6cd0e2",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          32,
+          36,
+          267,
+          263
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          138,
+          142,
+          373,
+          369
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 2,
+      "sticker_key": "bad-boy-02",
+      "caption_th": "มอร์นิ่งนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/02.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "90fe3e72e9df79b3e8e78804df57a842a4fe1249caecf3daf35ebe607ebd95b3",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          23,
+          35,
+          276,
+          264
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          129,
+          141,
+          382,
+          370
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 3,
+      "sticker_key": "bad-boy-03",
+      "caption_th": "ทำไรอยู่",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/03.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "96be05a14233394d91410ea19c68ea2c57fb66c2e05a1e07f440b3939aad856d",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          40,
+          38,
+          260,
+          262
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          146,
+          144,
+          366,
+          368
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 4,
+      "sticker_key": "bad-boy-04",
+      "caption_th": "ว่างคุยไหม",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/04.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "015012ff7c9589781e802606799f5990245f2bb05fa49e0e152bf570ecbc1a3c",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          30,
+          44,
+          270,
+          255
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          136,
+          150,
+          376,
+          361
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 5,
+      "sticker_key": "bad-boy-05",
+      "caption_th": "คิดถึงนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/05.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "98af1b44a16abd3e16ec5afa3bb579b5237473308875348e9f8d8193b2d06cee",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          32,
+          38,
+          267,
+          262
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          138,
+          144,
+          373,
+          368
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 6,
+      "sticker_key": "bad-boy-06",
+      "caption_th": "ขอกอดหน่อย",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/06.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "ddbd0328c4f369f11d04b91d8642268cbb93e189d5f7303e2668b813bdb6d0d8",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          26,
+          43,
+          273,
+          257
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          132,
+          149,
+          379,
+          363
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 7,
+      "sticker_key": "bad-boy-07",
+      "caption_th": "น่ารักจัง",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/07.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "d42c1a58e6ed4a4a77b78f4adfee7353bb0259559600bd10a4263edd96a50ac5",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          29,
+          43,
+          270,
+          257
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          135,
+          149,
+          376,
+          363
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 8,
+      "sticker_key": "bad-boy-08",
+      "caption_th": "เป็นห่วงนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/08.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "05f93826fa96bfa5f39be6a996ca1145a979af6b8a7eb8742d1dfcfb4db607a1",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          32,
+          38,
+          268,
+          261
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          138,
+          144,
+          374,
+          367
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 9,
+      "sticker_key": "bad-boy-09",
+      "caption_th": "กินข้าวยัง",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/09.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "b7e0c92bad25985c804eaacbf2ed1959590f8f862982a93654ef7a5b2b73588b",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          32,
+          38,
+          267,
+          261
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          138,
+          144,
+          373,
+          367
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 10,
+      "sticker_key": "bad-boy-10",
+      "caption_th": "ไปกันไหม",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/10.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "ad8a1e32cf25f056d5c093c4af71f94621cbe2216c5bc7fd524814a474f890ec",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          34,
+          40,
+          265,
+          260
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          140,
+          146,
+          371,
+          366
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 11,
+      "sticker_key": "bad-boy-11",
+      "caption_th": "ถึงบ้านบอกนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/11.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "13bb41087f41dbf3b09ea946517218e4713116c6370d05f09e3187562dcb36c0",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          26,
+          41,
+          274,
+          259
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          132,
+          147,
+          380,
+          365
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 12,
+      "sticker_key": "bad-boy-12",
+      "caption_th": "ฝันดีนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/12.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "d035f34d590b846688bfc418143a47494797e69f841327e8925675c3c5927645",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          35,
+          39,
+          265,
+          260
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          141,
+          145,
+          371,
+          366
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 13,
+      "sticker_key": "bad-boy-13",
+      "caption_th": "โอเคเลย",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/13.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "23eb1b1e1b42f44b83df8e8de3b507789168b6615780e78e613e26c6c0cfa207",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          34,
+          39,
+          266,
+          260
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          140,
+          145,
+          372,
+          366
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 14,
+      "sticker_key": "bad-boy-14",
+      "caption_th": "ได้เลย",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/14.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "7f24273d1b0ac8def7d3cbc58f0542278a336d53a9cb29d55aa1b66d8f9dde13",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          35,
+          35,
+          265,
+          264
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          141,
+          141,
+          371,
+          370
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 15,
+      "sticker_key": "bad-boy-15",
+      "caption_th": "แป๊บนึงนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/15.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "2ef67941f2138bcbc264290337cf3d1bc79e6aa839414633bc2d5d1329ffc102",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          22,
+          35,
+          278,
+          265
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          128,
+          141,
+          384,
+          371
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 16,
+      "sticker_key": "bad-boy-16",
+      "caption_th": "ขอบคุณนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/16.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "027b1f361b9bdcca2f540e30fcaf2bf9591691f6c2ae6db8432ad7b0a10b3877",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          31,
+          40,
+          269,
+          259
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          137,
+          146,
+          375,
+          365
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 17,
+      "sticker_key": "bad-boy-17",
+      "caption_th": "ขอโทษนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/17.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "5c3a7c54bc7070c66f1cba97297070ffe3b1f6ca6f0cfd3133762544b30b1935",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          31,
+          31,
+          268,
+          268
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          137,
+          137,
+          374,
+          374
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 18,
+      "sticker_key": "bad-boy-18",
+      "caption_th": "หายงอนน้า",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/18.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "e4db2ec04f2d1fc894f55c2143d5c2769c133109547a8a2099cd286e4253f16d",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          29,
+          46,
+          271,
+          254
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          135,
+          152,
+          377,
+          360
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 19,
+      "sticker_key": "bad-boy-19",
+      "caption_th": "งอนแล้วนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/19.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "336f843cd0b89c3a17159e26623f1f9c6eb397dee195de07f100e5a4942567a7",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          28,
+          31,
+          271,
+          268
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          134,
+          137,
+          377,
+          374
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 20,
+      "sticker_key": "bad-boy-20",
+      "caption_th": "ง้อหน่อย",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/20.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "1bed18d7949fb11581ed680a06c6d1ad3ba4890b80095b9379014cf7cac4ae4e",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          38,
+          45,
+          262,
+          254
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          144,
+          151,
+          368,
+          360
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 21,
+      "sticker_key": "bad-boy-21",
+      "caption_th": "สู้ ๆ นะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/21.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "a1d666e008ce933b61d932c6262e727c2962665658b3b4a6087b4a2b61ee7894",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          30,
+          22,
+          269,
+          278
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          136,
+          128,
+          375,
+          384
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 22,
+      "sticker_key": "bad-boy-22",
+      "caption_th": "เก่งมากเลย",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/22.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "afae1c35e61e9e1d209743f1fd4581de33b45f4bcc2fff0d37a61a8ce3a6218e",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          27,
+          32,
+          272,
+          268
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          133,
+          138,
+          378,
+          374
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 23,
+      "sticker_key": "bad-boy-23",
+      "caption_th": "ฮ่า ๆ ๆ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/23.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "41ff54a5450c01ca3d0e121ce8e42080724229b01953999b2acbaec1119011b4",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          39,
+          25,
+          261,
+          275
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          145,
+          131,
+          367,
+          381
+        ],
+        "safe_area_pass": true
+      }
+    },
+    {
+      "index": 24,
+      "sticker_key": "bad-boy-24",
+      "caption_th": "ไว้คุยกันนะ",
+      "asset_path": "public/resources/stickers/standardized/bad-boy/24.png",
+      "width": 512,
+      "height": 512,
+      "rgba": true,
+      "safe_area_pass": true,
+      "sha256": "7f6eb804f078353741599ecc3c1c9cda9012af6171a62d278dd58c46c728c6a3",
+      "source": {
+        "source_size": [
+          300,
+          300
+        ],
+        "source_alpha": true,
+        "source_nontransparent_bbox": [
+          38,
+          32,
+          261,
+          267
+        ],
+        "output_size": [
+          512,
+          512
+        ],
+        "output_nontransparent_bbox": [
+          144,
+          138,
+          367,
+          373
+        ],
+        "safe_area_pass": true
+      }
+    }
+  ]
+}
