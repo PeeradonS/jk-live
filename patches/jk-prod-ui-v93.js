@@ -8,12 +8,32 @@ function labelNav(){
   const spec=[['discover','หน้าแรก'],['people','เจอกัน'],['stories','เล่า'],['chat','แชท'],['me','ฉัน']];
   const btns=qa('.nav-btn',nav).slice(0,5);
   if(btns.length<5)return;
+  const current=q('#page')?.dataset?.route||'discover';
   btns.forEach((b,i)=>{
-    if(b.dataset.route!==spec[i][0]) b.dataset.route=spec[i][0];
+    const [route,label]=spec[i];
+    if(b.dataset.route!==route)b.dataset.route=route;
     const direct=[...b.children].find(x=>x.tagName==='SPAN'&&!x.querySelector('svg'));
-    setText(direct,spec[i][1]);
-    if(b.getAttribute('aria-label')!==spec[i][1]) b.setAttribute('aria-label',spec[i][1]);
+    setText(direct,label);
+    if(b.getAttribute('aria-label')!==label)b.setAttribute('aria-label',label);
+    b.classList.toggle('active',current===route||(route==='chat'&&current==='chat-detail'));
   });
+}
+
+if(!window.JK_NAV_CONTROLLER_V96){
+  window.JK_NAV_CONTROLLER_V96=1;
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('.jk-v17-nav .nav-btn');
+    if(!b)return;
+    const nav=q('.jk-v17-nav');
+    const btns=nav?qa('.nav-btn',nav).slice(0,5):[];
+    const i=btns.indexOf(b);
+    const routes=['discover','people','stories','chat','me'];
+    const route=routes[i]||b.dataset.route;
+    if(!route)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if(typeof window.JKOpenRoute==='function')window.JKOpenRoute(route);
+  },true);
 }
 
 function setChatBadge(show){
