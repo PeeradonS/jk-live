@@ -1,0 +1,152 @@
+/* JK v95 forced runtime · core conversation loop */
+html[data-jk-runtime="v95"]{
+  --jk95-red:#c91f3b;--jk95-ink:#24191d;--jk95-muted:#85767b;--jk95-line:#eadfe2;
+  --jk95-soft:#fff3f6;--jk95-card:#fff;--jk95-shadow:0 10px 28px rgba(67,29,40,.07)
+}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"]{padding-bottom:96px!important}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-city-hero{
+  border-radius:28px!important;padding:24px 22px!important;
+  background:linear-gradient(135deg,#321b23 0%,#721d34 58%,#c51838 100%)!important;
+  box-shadow:0 18px 40px rgba(91,24,45,.15)!important
+}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-city-hero-copy{max-width:100%!important}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-city-hero-copy h1{
+  margin:9px 0 7px!important;color:#fff!important;font-size:27px!important;line-height:1.22!important;letter-spacing:-.4px!important
+}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-city-hero-copy p{
+  margin:0!important;color:#f7ebee!important;font-size:14px!important;line-height:1.55!important
+}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-city-hero-copy small{color:#fff!important}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-orbit-people{display:none!important}
+html[data-jk-runtime="v95"] .jk95-hero-actions{
+  display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.85fr);gap:9px;margin-top:18px
+}
+html[data-jk-runtime="v95"] .jk95-hero-actions button{
+  min-height:50px;border-radius:16px;font-size:13px;font-weight:950;padding:0 12px
+}
+html[data-jk-runtime="v95"] .jk95-hero-actions .primary{border:0;background:#fff;color:#24191d}
+html[data-jk-runtime="v95"] .jk95-hero-actions .secondary{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.10);color:#fff}
+
+/* People first */
+html[data-jk-runtime="v95"] #peopleEngineV38{
+  margin:22px 0 0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important
+}
+html[data-jk-runtime="v95"] #peopleEngineV38>.jk-home-heading{margin-bottom:10px!important}
+html[data-jk-runtime="v95"] #peopleEngineV38>.jk-home-heading small{color:var(--jk95-muted)!important;font-size:11px!important}
+html[data-jk-runtime="v95"] #peopleEngineV38>.jk-home-heading h2{font-size:21px!important;margin:2px 0 0!important}
+html[data-jk-runtime="v95"] #peopleEngineV38>.jk-home-heading>button{
+  border:1px solid #f0d7dd!important;background:#fff!important;color:var(--jk95-red)!important;border-radius:999px!important;
+  min-height:36px!important;padding:0 12px!important;font-size:11px!important;font-weight:900!important
+}
+html[data-jk-runtime="v95"] #peopleEngineV38>.muted{font-size:11px!important;line-height:1.5!important;color:var(--jk95-muted)!important}
+html[data-jk-runtime="v95"] #peopleEngineV38 .jk-home-message-request-v52{
+  background:linear-gradient(135deg,#fff1f5,#fff)!important;border:1px solid #efcfd8!important;border-radius:21px!important;padding:8px!important;margin-bottom:14px!important
+}
+html[data-jk-runtime="v95"] #peopleEngineV38 .request-card{
+  border:0!important;background:transparent!important;box-shadow:none!important
+}
+html[data-jk-runtime="v95"] #peopleEngineV38 .jk-recommend-list-v54{display:grid!important;gap:9px!important}
+html[data-jk-runtime="v95"] #peopleEngineV38 .jk-recommend-person-v54{
+  border:1px solid var(--jk95-line)!important;background:#fff!important;border-radius:21px!important;padding:11px!important;
+  box-shadow:0 5px 16px rgba(59,27,36,.035)!important
+}
+html[data-jk-runtime="v95"] #peopleEngineV38 .jk-recommend-person-v54 .avatar{
+  width:62px!important;height:72px!important;border-radius:18px!important;overflow:hidden!important
+}
+html[data-jk-runtime="v95"] #peopleEngineV38 .jk-reco-body-v54 h4{font-size:15px!important}
+html[data-jk-runtime="v95"] #peopleEngineV38 .jk-reco-body-v54 p{font-size:12px!important;line-height:1.45!important;color:#6f6065!important}
+html[data-jk-runtime="v95"] #peopleEngineV38 .jk-reco-profile-v54{
+  border-radius:12px!important;background:#fff3f6!important;color:var(--jk95-red)!important;font-weight:900!important
+}
+
+/* Real intent filters */
+html[data-jk-runtime="v95"] #jkIntent95{margin-top:20px}
+html[data-jk-runtime="v95"] #jkIntent95 small{display:block;color:var(--jk95-muted);font-size:11px;font-weight:850;margin-bottom:4px}
+html[data-jk-runtime="v95"] #jkIntent95 h2{font-size:19px;margin:0 0 10px}
+html[data-jk-runtime="v95"] .jk95-intents{display:flex;gap:8px;overflow:auto;padding-bottom:3px;scrollbar-width:none}
+html[data-jk-runtime="v95"] .jk95-intents::-webkit-scrollbar{display:none}
+html[data-jk-runtime="v95"] .jk95-intents button{
+  flex:0 0 auto;min-height:40px;padding:0 13px;border:1px solid var(--jk95-line);border-radius:999px;background:#fff;
+  color:var(--jk95-ink);font-size:12px;font-weight:900
+}
+html[data-jk-runtime="v95"] .jk95-intents button.active{background:#261b1f;color:#fff;border-color:#261b1f}
+
+/* Random modes remain, but after people */
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-way-section{
+  margin:20px 0 0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important
+}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-way-section .jk-home-heading small{display:none!important}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-way-section .jk-home-heading h2{font-size:18px!important}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-random-primary-v27{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important
+}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-random-mode-v27{
+  min-height:66px!important;border:1px solid var(--jk95-line)!important;border-radius:18px!important;background:#fff!important;color:var(--jk95-ink)!important;
+  box-shadow:none!important;padding:9px 6px!important
+}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-random-mode-v27 b{font-size:12px!important}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-random-mode-v27 small{display:none!important}
+html[data-jk-runtime="v95"] #page[data-jk95-route="home"] .jk-choose-self-v27{
+  margin-top:8px!important;border:1px solid var(--jk95-line)!important;border-radius:17px!important;background:#fff!important;box-shadow:none!important
+}
+
+/* Incoming messages: actual count only */
+html[data-jk-runtime="v95"] .jk95-incoming-banner{
+  width:100%;display:flex;align-items:center;gap:11px;border:1px solid #efcbd4;background:linear-gradient(135deg,#fff2f5,#fff);
+  border-radius:20px;padding:14px;margin:0 0 12px;text-align:left;box-shadow:0 6px 18px rgba(90,26,45,.05)
+}
+html[data-jk-runtime="v95"] .jk95-incoming-banner .mark{
+  width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:14px;background:var(--jk95-red);color:#fff;font-size:18px
+}
+html[data-jk-runtime="v95"] .jk95-incoming-banner .grow{flex:1;min-width:0}
+html[data-jk-runtime="v95"] .jk95-incoming-banner b{display:block;color:#2d1d23;font-size:15px}
+html[data-jk-runtime="v95"] .jk95-incoming-banner small{display:block;color:#7f7075;font-size:11px;margin-top:2px}
+html[data-jk-runtime="v95"] .jk95-incoming-banner strong{color:var(--jk95-red);font-size:12px}
+html[data-jk-runtime="v95"] .jk-v17-nav .nav-btn[data-route="chat"]{position:relative}
+html[data-jk-runtime="v95"] .jk95-chat-badge{
+  position:absolute;right:13px;top:3px;min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--jk95-red);color:#fff;
+  border:2px solid #fff;display:grid;place-items:center;font-size:9px;font-weight:950
+}
+html[data-jk-runtime="v95"] #page .request-stack{border-radius:20px!important}
+html[data-jk-runtime="v95"] #page .request-card{border-radius:17px!important}
+html[data-jk-runtime="v95"] #page .request-card [data-request-action="accept"]{background:var(--jk95-red)!important;color:#fff!important}
+
+/* Other person's profile: CTA in first fold */
+html[data-jk-runtime="v95"] #modalRoot.jk95-profile-modal .jk-profile-preview{padding-bottom:8px!important}
+html[data-jk-runtime="v95"] #modalRoot.jk95-profile-modal .jk-profile-actions{
+  display:grid!important;grid-template-columns:1fr!important;gap:7px!important;margin:13px 0 7px!important
+}
+html[data-jk-runtime="v95"] #modalRoot.jk95-profile-modal #exploreIntro{
+  min-height:52px!important;border-radius:16px!important;background:var(--jk95-red)!important;color:#fff!important;font-weight:950!important;font-size:15px!important
+}
+html[data-jk-runtime="v95"] #modalRoot.jk95-profile-modal #exploreOpening{
+  min-height:45px!important;border:1px solid #efd8de!important;border-radius:15px!important;background:#fff4f7!important;color:#a61935!important;font-weight:900!important
+}
+html[data-jk-runtime="v95"] .jk95-profile-note{font-size:11px;color:#827278;line-height:1.45;margin:7px 1px 12px}
+html[data-jk-runtime="v95"] #profilePrivacyHintV34,
+html[data-jk-runtime="v95"] #profileMutualV53{display:none!important}
+
+/* First message: free, fast, context-first */
+html[data-jk-runtime="v95"] #messageRequestForm .intro-quota-v18,
+html[data-jk-runtime="v95"] #messageRequestForm #priorityHelloV44{display:none!important}
+html[data-jk-runtime="v95"] .jk95-starter-wrap{margin:3px 0 12px}
+html[data-jk-runtime="v95"] .jk95-starter-wrap>small{display:block;font-size:11px;color:#817277;font-weight:850;margin-bottom:7px}
+html[data-jk-runtime="v95"] .jk95-starters{display:flex;gap:7px;overflow:auto;scrollbar-width:none}
+html[data-jk-runtime="v95"] .jk95-starters::-webkit-scrollbar{display:none}
+html[data-jk-runtime="v95"] .jk95-starters button{
+  flex:0 0 auto;max-width:230px;border:1px solid var(--jk95-line);border-radius:14px;background:#fff;padding:9px 11px;
+  color:#4a363d;text-align:left;font-size:12px;line-height:1.4
+}
+html[data-jk-runtime="v95"] #messageRequestForm textarea{
+  min-height:112px!important;border:1px solid #e7dde0!important;border-radius:16px!important;font-size:15px!important;line-height:1.55!important;
+  color:#251a1e!important;caret-color:var(--jk95-red)!important
+}
+html[data-jk-runtime="v95"] .jk95-intro-help{font-size:11px;color:#88797e;line-height:1.5;margin:-4px 2px 11px}
+html[data-jk-runtime="v95"] #messageRequestForm button[type="submit"],
+html[data-jk-runtime="v95"] #messageRequestForm button.btn.primary.full{
+  min-height:50px!important;border-radius:16px!important;background:var(--jk95-red)!important;color:#fff!important;font-weight:950!important
+}
+
+@media(max-width:370px){
+  html[data-jk-runtime="v95"] .jk95-hero-actions{grid-template-columns:1fr}
+}
