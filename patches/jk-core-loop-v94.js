@@ -1,7 +1,7 @@
 (()=>{if(window.JK_CORE_LOOP_V94)return;window.JK_CORE_LOOP_V94=1;
 const q=(s,r=document)=>r.querySelector(s),qa=(s,r=document)=>[...r.querySelectorAll(s)];
 const store=window.sessionStorage;
-document.documentElement.dataset.jkUi='v94';
+document.documentElement.dataset.jkCore='v94';
 
 function log(kind,meta={}){
   try{
@@ -164,7 +164,7 @@ function trackChatOpen(){
 }
 
 function run(){
-  document.documentElement.dataset.jkUi='v94';
+  document.documentElement.dataset.jkCore='v94';
   paintChatBadge();enhanceHome();enhanceChat();enhanceProfileModal();enhanceIntro();trackChatOpen();
 }
 let queued=false;const schedule=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;run()})};
