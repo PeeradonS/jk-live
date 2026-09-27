@@ -16,6 +16,7 @@
 
   let packs = [];
   let paymentReady = false;
+  let paymentRoutes = {};
   let ready = false;
 
   const titles = [
@@ -107,11 +108,13 @@
     if (ready && !force) return packs;
     if (bridge.preview) {
       packs = makePreviewPacks();
+      paymentRoutes = {};
       paymentReady = false;
     } else {
       const result = await bridge.catalog();
       if (!result?.ok) throw new Error(result?.error || 'sticker_catalog_failed');
       packs = result.packs || [];
+      paymentRoutes = result.payment_routes && typeof result.payment_routes === 'object' ? result.payment_routes : {};
       paymentReady = !!result.digital_payment_ready;
     }
     itemByKey.clear();
@@ -249,6 +252,44 @@
     return !!pack.owned;
   }
 
+  function currentPlatform() {
+    const nativePlatform = String(window.JKNative?.platform || '').toLowerCase();
+    if (nativePlatform.includes('ios')) return 'ios';
+    if (nativePlatform.includes('android')) return 'android';
+    const ua = String(navigator.userAgent || '').toLowerCase();
+    if (/iphone|ipad|ipod/.test(ua)) return 'ios';
+    if (/android/.test(ua)) return 'android';
+    return 'web';
+  }
+
+  function paymentStatus() {
+    const platform=currentPlatform();
+    const route=paymentRoutes?.[platform] || null;
+    return {
+      platform,
+      route,
+      provider:String(route?.provider || ''),
+      ready:!!route?.ready && !!paymentReady
+    };
+  }
+
+  async function startPurchaseByPackId(packId) {
+    await loadCatalog();
+    const pack=packs.find(p=>p.pack_id===packId);
+    if(!pack) return { ok:false, error:'pack_not_found' };
+    if(packOwned(pack)) return { ok:true, owned:true, pack_id:pack.pack_id };
+    if(bridge.preview) return { ok:false, error:'preview_payment_disabled', platform:'preview' };
+    const ps=paymentStatus();
+    if(!ps.ready) return { ok:false, error:'payment_not_ready', platform:ps.platform, provider:ps.provider };
+    try{
+      const launched=await bridge.purchase(pack.item_key);
+      if(launched===false) return { ok:false, error:'purchase_not_started', platform:ps.platform, provider:ps.provider };
+      return { ok:true, started:true, platform:ps.platform, provider:ps.provider, pack_id:pack.pack_id };
+    }catch(err){
+      return { ok:false, error:'purchase_start_failed', platform:ps.platform, provider:ps.provider, detail:String(err?.message||err) };
+    }
+  }
+
   function priceText(pack) {
     const amount = Number(pack.amount_minor || 0);
     return amount === 0 ? 'ฟรี' : (amount/100).toLocaleString('th-TH') + ' บาท';
@@ -346,16 +387,16 @@
 
   async function buyPack(pack, source) {
     if (packOwned(pack)) return openPack(pack.pack_id,source);
-    if (bridge.preview) {
-      const owned=previewOwned(); owned.add(pack.pack_id); savePreviewOwned(owned); pack.owned=true;
-      bridge.toast('Preview: จำลองปลดล็อก ' + pack.title + ' แล้ว');
-      return openPack(pack.pack_id,source);
+    const result=await startPurchaseByPackId(pack.pack_id);
+    if(!result.ok){
+      if(result.error==='preview_payment_disabled') bridge.toast('Preview ไม่จำลองการจ่ายเงินจริง');
+      else if(result.error==='payment_not_ready') bridge.toast('ยังไม่เปิดชำระเงินจริง');
+      else bridge.toast('ยังเริ่มการชำระเงินไม่ได้');
+      return result;
     }
-    if (!paymentReady) return bridge.toast('ยังไม่เปิดชำระเงินจริง');
-    const result = await bridge.purchase(pack.item_key);
-    if (!result) return;
-    await loadCatalog(true);
-    openPack(pack.pack_id,source);
+    if(result.owned) return openPack(pack.pack_id,source);
+    bridge.toast('กำลังเปิดช่องทางชำระเงิน · ระบบจะเพิ่มแพ็กหลังยืนยันการจ่ายสำเร็จ');
+    return result;
   }
 
   async function openTray(packId='') {
@@ -392,9 +433,12 @@
   window.JKStickerV77 = {
     get ready(){ return ready; },
     get packs(){ return packs; },
+    get paymentReady(){ return paymentStatus().ready; },
+    get paymentStatus(){ return paymentStatus(); },
     loadCatalog,
     getCatalog: async () => { await loadCatalog(); return packs; },
     isOwned: pack => packOwned(pack),
+    startPurchaseByPackId,
     sendByKey: async (packId, stickerKey) => {
       await loadCatalog();
       const pack=packs.find(p=>p.pack_id===packId);
