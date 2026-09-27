@@ -41,6 +41,7 @@ jobs:
         run: |
           mkdir -p site/patches
           cp -R patches/. site/patches/
+          if [ -d resources ]; then mkdir -p site/resources && cp -R resources/. site/resources/; fi
           python3 - <<'PY'
           from pathlib import Path
           import re
