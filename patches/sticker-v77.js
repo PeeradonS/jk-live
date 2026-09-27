@@ -387,7 +387,17 @@
 
   window.JKStickerV77 = {
     get ready(){ return ready; },
+    get packs(){ return packs; },
     loadCatalog,
+    getCatalog: async () => { await loadCatalog(); return packs; },
+    isOwned: pack => packOwned(pack),
+    sendByKey: async (packId, stickerKey) => {
+      await loadCatalog();
+      const pack=packs.find(p=>p.pack_id===packId);
+      const item=pack?.items?.find(i=>i.sticker_key===stickerKey);
+      if(!pack||!item) return false;
+      return send(pack,item);
+    },
     openStore,
     openTray,
     openPack,
