@@ -8,6 +8,7 @@ let overlay=null,catalog=[],query='',category='',detailPackId='',oldOverflow='',
 
 const api=()=>window.JKStickerV77||null;
 const isOwned=p=>!!(p&&(Number(p.amount_minor||0)===0||p.owned||api()?.isOwned?.(p)));
+const saleReady=p=>!!p?.sale_ready;
 const price=p=>{const n=Number(p?.amount_minor||0);return n===0?'ฟรี':(n/100).toLocaleString('th-TH')+' บาท'};
 const art=(i,cls='')=>api()?.lazyArtMarkup?.(i?.sticker_key,cls)||api()?.artMarkup?.(i?.sticker_key,cls)||'<span class="jk105-fallback">JK</span>';
 function paymentState(){
@@ -39,9 +40,11 @@ async function startPackPurchase(pack){
     if(btn){btn.disabled=false;btn.textContent='ซื้อ '+price(pack)}
     return result;
   }
-  const msg=result?.error==='payment_not_ready'||result?.error==='preview_payment_disabled'
-    ? 'ช่องทางชำระเงินจริงยังไม่เปิดใช้งาน'
-    : 'ยังเริ่มการชำระเงินไม่ได้ ลองใหม่อีกครั้ง';
+  const msg=result?.error==='art_not_ready'
+    ? 'แพ็กนี้ยังไม่เปิดขายจนกว่างานภาพจริงจะครบ 24 รูป'
+    : result?.error==='payment_not_ready'||result?.error==='preview_payment_disabled'
+      ? 'ช่องทางชำระเงินจริงยังไม่เปิดใช้งาน'
+      : 'ยังเริ่มการชำระเงินไม่ได้ ลองใหม่อีกครั้ง';
   if(status)status.textContent=msg;
   if(btn){btn.disabled=!paymentState().ready;btn.textContent=paymentState().ready?'ซื้อ '+price(pack):'ยังไม่เปิดชำระเงินจริง'}
   return result||{ok:false,error:'purchase_failed'};
@@ -61,6 +64,7 @@ function cover(p){
 }
 function status(p){
   if(isOwned(p))return '<span class="jk105-owned">มีแล้ว</span>';
+  if(!saleReady(p))return '<span class="jk105-artwait">กำลังปรับภาพ</span>';
   return '<span class="jk105-price">'+esc(price(p))+'</span>';
 }
 function card(p){
@@ -138,9 +142,11 @@ function renderDetail(packId){
     '<div class="jk105-detail-action">'+
       (isOwned(p)
         ? '<button type="button" class="jk105-use" id="jk105Use">ใช้ชุดนี้</button><small>เปิดกลับไปที่ “ของฉัน” แล้วเลือกส่งได้ทันที</small>'
-        : (paymentState().ready
-          ? '<button type="button" class="jk105-buy" id="jk105Buy">ซื้อ '+esc(price(p))+'</button><small id="jk105PaymentStatus">เมื่อชำระสำเร็จ สิทธิ์จะผูกกับบัญชีและกู้คืนได้ทุกเครื่อง</small>'
-          : '<button type="button" class="jk105-buy" id="jk105Buy" disabled>ยังไม่เปิดชำระเงินจริง</button><small id="jk105PaymentStatus">ราคา '+esc(price(p))+' · ช่องทางชำระเงินกำลังเชื่อมต่อ ระบบจะไม่จำลองว่าสำเร็จ</small>'))+
+        : (!saleReady(p)
+          ? '<button type="button" class="jk105-buy" id="jk105Buy" disabled>กำลังปรับงานภาพ</button><small id="jk105PaymentStatus">ยังไม่เปิดขายจนกว่า PNG 512×512 โปร่งใสจะครบ 24 รูป</small>'
+          : (paymentState().ready
+            ? '<button type="button" class="jk105-buy" id="jk105Buy">ซื้อ '+esc(price(p))+'</button><small id="jk105PaymentStatus">เมื่อชำระสำเร็จ สิทธิ์จะผูกกับบัญชีและกู้คืนได้ทุกเครื่อง</small>'
+            : '<button type="button" class="jk105-buy" id="jk105Buy" disabled>ยังไม่เปิดชำระเงินจริง</button><small id="jk105PaymentStatus">ราคา '+esc(price(p))+' · ช่องทางชำระเงินกำลังเชื่อมต่อ ระบบจะไม่จำลองว่าสำเร็จ</small>')))+
     '</div>';
   q('#jk105Back',body).onclick=renderBrowse;
   const use=q('#jk105Use',body);
