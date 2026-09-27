@@ -131,6 +131,11 @@ function renderMine(packId=''){
   bindTiles(body);
 }
 function renderStore(){
+  if(window.JKStickerStoreV105?.open){
+    close();
+    window.JKStickerStoreV105.open();
+    return;
+  }
   if(!overlay)return;const body=q('.jk104-body',overlay),packs=q('.jk104-packs',overlay);packs.innerHTML='';
   body.innerHTML='<div class="jk104-storehead"><div><small>JK ORIGINAL</small><b>ร้าน Sticker</b><span>24 ภาพต่อชุด · ซื้อแล้วใช้กับบัญชีเดิมได้</span></div></div>'+
     '<div class="jk104-storegrid">'+catalog.map(p=>{
@@ -305,5 +310,18 @@ let queued=false;
 const hydrate=()=>{if(queued)return;queued=true;queueMicrotask(()=>{queued=false;styleTrigger();runQa();runStep5Qa()})};
 new MutationObserver(hydrate).observe(document.documentElement,{childList:true,subtree:true});
 document.addEventListener('DOMContentLoaded',()=>{styleTrigger();runQa();runStep5Qa()});setTimeout(()=>{styleTrigger();runQa();runStep5Qa()},150);setTimeout(()=>{styleTrigger();runQa();runStep5Qa()},700);setTimeout(runQa,1400);setTimeout(runStep5Qa,1400);
-window.JKStickerPickerV104={open,close,toggleFav,favorites,recent,usage,runQa,runStep5Qa};
+async function openMinePack(packId=''){
+  const br=bridge();
+  if(!br?.activeMatch?.())return br?.toast?.('เลือกห้องคุยก่อนใช้สติ๊กเกอร์');
+  if(!overlay){
+    const a=api();if(!a)return;
+    catalog=await a.getCatalog();
+    oldOverflow=document.documentElement.style.overflow;
+    document.documentElement.style.overflow='hidden';
+    overlay=shell();document.addEventListener('keydown',onKey);
+  }
+  setTab('mine');
+  renderMine(packId);
+}
+window.JKStickerPickerV104={open,close,toggleFav,favorites,recent,usage,runQa,runStep5Qa,openMinePack};
 })();
