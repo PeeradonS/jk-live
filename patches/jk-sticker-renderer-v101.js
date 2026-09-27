@@ -65,7 +65,28 @@ function upgradeWrap(wrap){
 }
 
 function scan(){
+  injectQaFixture();
   qa('.bubble-wrap').forEach(upgradeWrap);
+}
+
+
+const QA_MODE=new URLSearchParams(location.search).get('stickerQa')==='1';
+function injectQaFixture(){
+  if(!QA_MODE)return;
+  const list=q('#messageList');if(!list||list.dataset.jkStickerQaV101==='1')return;
+  list.dataset.jkStickerQaV101='1';
+  const samples=[
+    {side:'me',face:'☺',caption:'หายงอนน้า',time:'13:18'},
+    {side:'me',face:'♡',caption:'แป๊บนึงนะ',time:'13:18'},
+    {side:'them',face:'✦',caption:'ถึงบ้านบอกนะ',time:'13:19'}
+  ];
+  samples.forEach((x,i)=>{
+    const wrap=document.createElement('div');
+    wrap.className='bubble-wrap '+x.side;
+    wrap.dataset.chatMessageV28='jk-sticker-qa-'+i;
+    wrap.innerHTML='<div class="jk-sticker-bubble-v28"><i>'+esc(x.face)+'</i><b>'+esc(x.caption)+'</b></div><span class="bubble-time">'+x.time+'</span>';
+    list.appendChild(wrap);
+  });
 }
 
 let queued=false;
