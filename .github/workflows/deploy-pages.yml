@@ -28,7 +28,7 @@ jobs:
           wget --mirror --page-requisites --convert-links --adjust-extension --no-parent \
             --domains jk-jerkan-preview.netlify.app \
             --directory-prefix mirror \
-            https://jk-jerkan-preview.netlify.app/
+            https://jk-jerkan-preview.netlify.app/ || test -f mirror/jk-jerkan-preview.netlify.app/index.html
           cp -R mirror/jk-jerkan-preview.netlify.app/. site/
 
       - name: Apply latest JK production patches
