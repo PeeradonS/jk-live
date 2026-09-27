@@ -149,6 +149,7 @@ jobs:
             --virtual-time-budget=6000 \
             --dump-dom "http://127.0.0.1:8765/?preview=1&stickerQaStep9=1" \
             >/tmp/jk-sticker-step9-qa.html
+          grep -o "JK STICKER STEP 9[^<]*" /tmp/jk-sticker-step9-qa.html || true
           grep -q "JK STICKER STEP 9 · PASS · long press + reply + favorite + resend" /tmp/jk-sticker-step9-qa.html
           echo "Sticker interaction browser QA PASS · STEP 9"
 
