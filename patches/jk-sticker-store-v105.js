@@ -111,21 +111,58 @@ function qaResult(){
   };
 }
 const QA=new URLSearchParams(location.search).get('storeQaStep6')==='1';
-async function runQa(){
-  if(!QA)return;
-  await open();
-  const r=qaResult()||{};
-  const first=catalog[0];
-  if(first)renderDetail(first.pack_id);
-  const detailCount=qa('.jk105-preview-item',overlay).length;
-  const result={...r,detailCount,pass:r.cards>0&&r.search&&r.categories>1&&detailCount===24};
-  window.JK_STICKER_STORE_V105_QA=result;
+let qaDone=false,qaTries=0;
+function qaBadge(text,pass=null){
   let badge=q('#jk105QaStatus');
-  if(!badge){badge=document.createElement('div');badge.id='jk105QaStatus';badge.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';document.body.appendChild(badge)}
-  badge.style.background=result.pass?'#e9f8ee':'#fff0f0';badge.style.color=result.pass?'#176b36':'#9b1c1c';
-  badge.textContent=result.pass?'JK STICKER STEP 6 · PASS · browse + search + category + 24 preview':'JK STICKER STEP 6 · FAIL · '+JSON.stringify(result);
+  if(!badge){
+    badge=document.createElement('div');
+    badge.id='jk105QaStatus';
+    badge.style.cssText='position:fixed;left:12px;right:12px;top:12px;z-index:2147483647;padding:12px 14px;border-radius:14px;font:700 12px/1.45 system-ui;box-shadow:0 8px 24px rgba(0,0,0,.12)';
+    document.body.appendChild(badge);
+  }
+  badge.style.background=pass===true?'#e9f8ee':pass===false?'#fff0f0':'#fff8e8';
+  badge.style.color=pass===true?'#176b36':pass===false?'#9b1c1c':'#7b5a00';
+  badge.textContent=text;
 }
-document.addEventListener('DOMContentLoaded',()=>setTimeout(runQa,600));
-setTimeout(runQa,1200);
+async function runQa(){
+  if(!QA||qaDone)return;
+  qaTries++;
+  qaBadge('JK STICKER STEP 6 · CHECKING · try '+qaTries);
+  const a=api();
+  if(!a?.getCatalog){
+    if(qaTries<24)return setTimeout(runQa,250);
+    qaDone=true;return qaBadge('JK STICKER STEP 6 · FAIL · sticker API not ready',false);
+  }
+  try{
+    catalog=await a.getCatalog();
+    if(!Array.isArray(catalog)||!catalog.length){
+      if(qaTries<24)return setTimeout(runQa,250);
+      qaDone=true;return qaBadge('JK STICKER STEP 6 · FAIL · empty catalog',false);
+    }
+    if(!overlay){
+      oldOverflow=document.documentElement.style.overflow;
+      document.documentElement.style.overflow='hidden';
+      overlay=shell();document.addEventListener('keydown',onKey);
+    }
+    query='';category='';renderBrowse();
+    const r=qaResult()||{};
+    const first=catalog[0];
+    renderDetail(first.pack_id);
+    const detailCount=qa('.jk105-preview-item',overlay).length;
+    const result={...r,detailCount,pass:r.cards>0&&r.search&&r.categories>1&&detailCount===24};
+    window.JK_STICKER_STORE_V105_QA=result;
+    qaDone=true;
+    qaBadge(result.pass
+      ? 'JK STICKER STEP 6 · PASS · browse + search + category + 24 preview'
+      : 'JK STICKER STEP 6 · FAIL · cards='+r.cards+' search='+!!r.search+' categories='+r.categories+' preview='+detailCount,
+      result.pass);
+  }catch(err){
+    if(qaTries<24)return setTimeout(runQa,250);
+    qaDone=true;qaBadge('JK STICKER STEP 6 · FAIL · '+String(err?.message||err),false);
+  }
+}
+if(QA)qaBadge('JK STICKER STEP 6 · CHECKING');
+document.addEventListener('DOMContentLoaded',()=>setTimeout(runQa,120));
+setTimeout(runQa,180);
 window.JKStickerStoreV105={open,close,renderBrowse,renderDetail};
 })();
