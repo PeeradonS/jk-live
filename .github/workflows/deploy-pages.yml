@@ -79,6 +79,8 @@ jobs:
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
               ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.5"></script>'),
+              ('jk-sticker-interactions-v106.js', '<script src="./patches/jk-sticker-interactions-v106.js?v=106.0"></script>'),
+              ('jk-sticker-performance-v107.js', '<script src="./patches/jk-sticker-performance-v107.js?v=107.0"></script>'),
               ('jk-sticker-store-v105.js', '<script src="./patches/jk-sticker-store-v105.js?v=105.7"></script>'),
           ]
 
@@ -95,6 +97,8 @@ jobs:
           s = re.sub(r'(jk-sticker-picker-v104\.js)(?:\?v=[^"\']*)?', r'\1?v=104.5', s)
           s = re.sub(r'(jk-sticker-store-v105\.css)(?:\?v=[^"\']*)?', r'\1?v=105.7', s)
           s = re.sub(r'(jk-sticker-store-v105\.js)(?:\?v=[^"\']*)?', r'\1?v=105.7', s)
+          s = re.sub(r'(jk-sticker-interactions-v106\.js)(?:\?v=[^"\']*)?', r'\1?v=106.0', s)
+          s = re.sub(r'(jk-sticker-performance-v107\.js)(?:\?v=[^"\']*)?', r'\1?v=107.0', s)
 
           s = re.sub(r'<style id="jk-sticker-pro-v100">.*?</style>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script id="jk-sticker-pro-v100">.*?</script>', '', s, flags=re.I|re.S)
@@ -108,6 +112,11 @@ jobs:
 
           if 'JK_STICKER_RENDERER_V101' not in s:
               raise SystemExit('Sticker Renderer v101 was not embedded into production HTML')
+
+          if 'jk-sticker-interactions-v106.js' not in s:
+              raise SystemExit('Sticker interactions v106 missing from production HTML')
+          if 'jk-sticker-performance-v107.js' not in s:
+              raise SystemExit('Sticker performance v107 missing from production HTML')
 
           p.write_text(s, encoding='utf-8')
           PY
