@@ -42,6 +42,7 @@ jobs:
         run: |
           mkdir -p site/patches
           cp -R patches/. site/patches/
+          cp patches/sticker-v77.js site/sticker-v77.js
           if [ -d resources ]; then mkdir -p site/resources && cp -R resources/. site/resources/; fi
           python3 - <<'PY'
           from pathlib import Path
