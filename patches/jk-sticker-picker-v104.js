@@ -221,10 +221,12 @@ async function runQa(){
   el.style.color=result.pass?'#176b36':'#9b1c1c';
   el.dataset.result=result.pass?'pass':'fail';
   el.dataset.qa=JSON.stringify(result);
+  const d=window.JK_STICKER_V77_SEND_DEBUG||{};
   el.textContent=(result.pass?'STICKER PICKER V104 QA PASS · ':'STICKER PICKER V104 QA FAIL · ')+
     'api='+result.apiSend+' · bridge='+result.bridgeSend+' · recent='+result.recentFirst+
     ' · activeBefore='+result.activeBefore+' · activeAfterCatalog='+result.activeAfterCatalog+
-    ' · owned='+result.packOwned+' · busy='+result.busyBefore;
+    ' · owned='+result.packOwned+' · busy='+result.busyBefore+
+    ' · v77(pack='+!!d.packFound+',item='+!!d.itemFound+',owned='+!!d.owned+',active='+!!d.activeMatch+',result='+!!d.result+')';
 }
 
 function styleTrigger(){
