@@ -53,7 +53,7 @@ jobs:
 
           s = re.sub(r'<iframe[^>]+(?:netlify|\.netlify)[^>]*>.*?</iframe>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script[^>]+src=["\'][^"\']*(?:netlify|\.netlify)[^"\']*["\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
-          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.1"')
+          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.2"')
 
           head_assets = [
               ('sticker-shop-v62.css', '<link rel="stylesheet" href="./patches/sticker-shop-v62.css">'),
