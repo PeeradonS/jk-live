@@ -25,6 +25,7 @@ jobs:
         run: |
           node --check patches/jk-sticker-renderer-v101.js
           node --check patches/jk-sticker-picker-v104.js
+          node --check patches/jk-sticker-store-v105.js
           node --check patches/sticker-v77.js
 
       - name: Mirror current public JK production
