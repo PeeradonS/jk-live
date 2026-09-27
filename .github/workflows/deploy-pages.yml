@@ -67,7 +67,7 @@ jobs:
               ('jk-recovery-v90.js', '<script src="./patches/jk-recovery-v90.js"></script>'),
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
-              ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.2"></script>'),
+              ('jk-sticker-picker-v104.js', '<script src="./patches/jk-sticker-picker-v104.js?v=104.3"></script>'),
           ]
 
           for key, tag in head_assets:
