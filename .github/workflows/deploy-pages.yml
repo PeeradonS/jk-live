@@ -59,7 +59,7 @@ jobs:
 
           s = re.sub(r'<iframe[^>]+(?:netlify|\.netlify)[^>]*>.*?</iframe>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script[^>]+src=["\'][^"\']*(?:netlify|\.netlify)[^"\']*["\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
-          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.5"')
+          s = s.replace('src="./sticker-v77.js"', 'src="./sticker-v77.js?v=77.6"')
 
           head_assets = [
               ('sticker-shop-v62.css', '<link rel="stylesheet" href="./patches/sticker-shop-v62.css">'),
@@ -160,7 +160,20 @@ jobs:
             >/tmp/jk-sticker-step10-qa.html
           grep -q "JK STICKER STEP 10 · PASS · 12-pack batching + deferred art + max 3 concurrent" /tmp/jk-sticker-step10-qa.html
 
-          echo "Sticker browser QA PASS · STEP 6 + STEP 7 + STEP 8 + STEP 9 + STEP 10"
+          "$CHROME" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --virtual-time-budget=7000 \
+            --dump-dom "http://127.0.0.1:8765/tests/sticker-e2e-step11-qa.html?stickerQaStep11=1" \
+            >/tmp/jk-sticker-step11-desktop.html
+          grep -q "JK STICKER STEP 11 · PASS · A→B + two packs + reload + reply + broken-image fallback" /tmp/jk-sticker-step11-desktop.html
+
+          "$CHROME" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage \
+            --window-size=390,844 \
+            --virtual-time-budget=7000 \
+            --dump-dom "http://127.0.0.1:8765/tests/sticker-e2e-step11-qa.html?stickerQaStep11=1&mobile=1" \
+            >/tmp/jk-sticker-step11-mobile.html
+          grep -q "JK STICKER STEP 11 · PASS · A→B + two packs + reload + reply + broken-image fallback" /tmp/jk-sticker-step11-mobile.html
+
+          echo "Sticker browser QA PASS · STEP 6 + STEP 7 + STEP 8 + STEP 9 + STEP 10 + STEP 11"
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
