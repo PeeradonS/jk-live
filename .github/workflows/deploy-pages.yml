@@ -52,12 +52,14 @@ jobs:
               ('jk-live-ux-v91.css', '<link rel="stylesheet" href="./patches/jk-live-ux-v91.css">'),
               ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
               ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
+              ('jk-core-loop-v94.css', '<link rel="stylesheet" href="./patches/jk-core-loop-v94.css?v=94.0">'),
           ]
           body_assets = [
               ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
               ('jk-recovery-v90.js', '<script src="./patches/jk-recovery-v90.js"></script>'),
               ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
               ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
+              ('jk-core-loop-v94.js', '<script src="./patches/jk-core-loop-v94.js?v=94.0"></script>'),
           ]
 
           for key, tag in head_assets:
