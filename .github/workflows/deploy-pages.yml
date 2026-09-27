@@ -61,7 +61,7 @@ jobs:
               ('jk-live-ux-v91.css', '<link rel="stylesheet" href="./patches/jk-live-ux-v91.css">'),
               ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
               ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
-              ('jk-sticker-picker-v104.css', '<link rel="stylesheet" href="./patches/jk-sticker-picker-v104.css?v=104.1">'),
+              ('jk-sticker-picker-v104.css', '<link rel="stylesheet" href="./patches/jk-sticker-picker-v104.css?v=104.2">'),
           ]
           body_assets = [
               ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
