@@ -25,11 +25,12 @@ jobs:
         run: |
           rm -rf mirror site
           mkdir -p mirror site
-          wget --mirror --page-requisites --convert-links --adjust-extension --no-parent \
+          wget --mirror --page-requisites --adjust-extension --no-parent \
             --domains jk-jerkan-preview.netlify.app \
             --directory-prefix mirror \
             https://jk-jerkan-preview.netlify.app/ || test -f mirror/jk-jerkan-preview.netlify.app/index.html
           cp -R mirror/jk-jerkan-preview.netlify.app/. site/
+          rm -rf site/.netlify
 
       - name: Apply latest JK production patches
         run: |
@@ -39,6 +40,9 @@ jobs:
           from pathlib import Path
           p = Path('site/index.html')
           s = p.read_text(encoding='utf-8')
+          import re
+          s = re.sub(r'<iframe[^>]+(?:netlify|\.netlify)[^>]*>.*?</iframe>', '', s, flags=re.I|re.S)
+          s = re.sub(r'<script[^>]+src=[\"\'][^\"\']*(?:netlify|\.netlify)[^\"\']*[\"\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
           head = '''
           <link rel="stylesheet" href="./patches/sticker-shop-v62.css">
           <link rel="stylesheet" href="./patches/sticker-v77.css">
