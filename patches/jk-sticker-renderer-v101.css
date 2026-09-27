@@ -1,0 +1,80 @@
+/* JK Sticker Renderer v101
+   STEP 1 only: sticker message presentation. No picker, store, routing or auth changes. */
+.bubble-wrap.jk-sticker-message-v101{
+  max-width:196px!important;
+  width:auto!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.bubble-wrap.jk-sticker-message-v101.me{
+  align-self:flex-end!important;
+  align-items:flex-end!important;
+}
+.bubble-wrap.jk-sticker-message-v101.them{
+  align-self:flex-start!important;
+  align-items:flex-start!important;
+}
+.bubble-wrap.jk-sticker-message-v101 .jk-sticker-host-v101,
+.bubble-wrap.jk-sticker-message-v101 .jk-sticker-bubble-v28,
+.bubble-wrap.jk-sticker-message-v101 [class*="sticker-bubble"]{
+  display:block!important;
+  width:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:184px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.bubble-wrap.jk-sticker-message-v101 .jk-sticker-bubble-v28>i,
+.bubble-wrap.jk-sticker-message-v101 .jk-sticker-bubble-v28>b{
+  display:none!important;
+}
+.jk-sticker-art-v101,
+.bubble-wrap.jk-sticker-message-v101 .jk-sticker-image-v62,
+.bubble-wrap.jk-sticker-message-v101 .jk-v77-art{
+  display:block!important;
+  width:176px!important;
+  height:176px!important;
+  max-width:min(44vw,176px)!important;
+  max-height:min(44vw,176px)!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 5px 7px rgba(49,25,34,.07));
+}
+.bubble-wrap.jk-sticker-message-v101 .bubble-time{
+  display:block!important;
+  margin-top:2px!important;
+  padding:0 4px!important;
+  color:#a3979b!important;
+  font-size:9px!important;
+  line-height:1.25!important;
+  background:transparent!important;
+}
+.bubble-wrap.jk-sticker-message-v101.me .bubble-time{text-align:right!important}
+.bubble-wrap.jk-sticker-message-v101.them .bubble-time{text-align:left!important}
+.bubble-wrap.jk-sticker-message-v101 .jk-reaction-stack-v28{
+  margin-top:3px!important;
+}
+@media(max-width:380px){
+  .jk-sticker-art-v101,
+  .bubble-wrap.jk-sticker-message-v101 .jk-sticker-image-v62,
+  .bubble-wrap.jk-sticker-message-v101 .jk-v77-art{
+    width:158px!important;height:158px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .bubble-wrap.jk-sticker-message-v101{scroll-behavior:auto!important}
+}
