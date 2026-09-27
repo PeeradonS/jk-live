@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JK Sticker Renderer v101 QA</title>
+<link rel="stylesheet" href="./jk-sticker-renderer-v101.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f2f3;font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;color:#24191d}
+.qa-shell{width:min(100%,430px);min-height:100vh;margin:auto;background:#fff;padding:18px 14px 36px}
+.qa-head{position:sticky;top:0;background:#fff;padding:10px 0 14px;border-bottom:1px solid #eee5e8;margin-bottom:14px;z-index:2}
+.qa-head b{font-size:18px}.qa-head small{display:block;color:#8b7d82;margin-top:3px}
+.message-list{display:flex;flex-direction:column;gap:10px}
+.bubble-wrap{display:flex;flex-direction:column;max-width:82%}
+.bubble-wrap.me{align-self:flex-end;align-items:flex-end}.bubble-wrap.them{align-self:flex-start;align-items:flex-start}
+.bubble{padding:10px 13px;border-radius:18px;line-height:1.45;font-size:14px}
+.me .bubble{background:#d3163b;color:#fff}.them .bubble{background:#f4f0f1}
+.bubble-time{font-size:9px;color:#aaa0a3;margin-top:3px;padding:0 3px}
+.jk-sticker-bubble-v28{width:118px;min-height:100px;border-radius:27px;display:grid;place-items:center;text-align:center;background:#d3163b;padding:12px}
+.jk-sticker-bubble-v28 i{font-style:normal;font-size:34px}.jk-sticker-bubble-v28 b{font-size:15px;color:#fff}
+.qa-note{margin:24px 0 0;padding:12px;border-radius:14px;background:#f9f5f6;color:#74656a;font-size:12px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="qa-shell">
+  <div class="qa-head"><b>Sticker Renderer v101 · STEP 1 QA</b><small>ใช้ Renderer ตัวเดียวกับ Production</small></div>
+  <div class="message-list">
+    <div class="bubble-wrap them" data-chat-message-v28="t1"><div class="bubble">เห็นว่าชอบดูหนังเหมือนกัน ช่วงนี้มีเรื่องไหนอยากดูไหม?</div><span class="bubble-time">13:17</span></div>
+    <div class="bubble-wrap me" data-chat-message-v28="s1"><div class="jk-sticker-bubble-v28"><i>♡</i><b>หายงอนน้า</b></div><span class="bubble-time">13:18</span></div>
+    <div class="bubble-wrap me" data-chat-message-v28="s2"><div class="jk-sticker-bubble-v28"><i>☺</i><b>แป๊บนึงนะ</b></div><span class="bubble-time">13:18</span></div>
+    <div class="bubble-wrap me" data-chat-message-v28="s3"><div class="jk-sticker-bubble-v28"><i>⌂</i><b>ถึงบ้านบอกนะ</b></div><span class="bubble-time">13:19</span></div>
+    <div class="bubble-wrap them" data-chat-message-v28="t2"><div class="bubble">ได้เลย ถึงแล้วจะบอกนะ 😊</div><span class="bubble-time">13:20</span></div>
+  </div>
+  <div class="qa-note">เกณฑ์ผ่าน: ไม่มีพื้นแดงหลังสติ๊กเกอร์ · artwork 158–176px · ฝั่งเราชิดขวา · timestamp เล็กใต้ภาพ · bubble ข้อความปกติไม่เปลี่ยน</div>
+</div>
+<script src="./jk-sticker-renderer-v101.js"></script>
+</body>
+</html>
