@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "product": "JK Stickers",
+  "canonical_format": {
+    "file_type": "PNG",
+    "canvas": {
+      "width": 512,
+      "height": 512
+    },
+    "color_mode": "RGBA",
+    "transparency_required": true,
+    "safe_area": {
+      "x": 48,
+      "y": 48,
+      "width": 416,
+      "height": 416
+    },
+    "max_artwork_box": {
+      "width": 416,
+      "height": 416
+    },
+    "scaling": "contain",
+    "stretch_allowed": false,
+    "crop_allowed": false,
+    "caption_embedded_in_artwork": true,
+    "caption_language": "th-TH"
+  },
+  "pack_rules": {
+    "sticker_count": 24,
+    "filename_pattern": "01.png..24.png",
+    "account_bound_purchase": true,
+    "restore_supported": true
+  },
+  "delivery": {
+    "chat_render_max_px": 176,
+    "picker_thumbnail_px": 112,
+    "source_retained": true,
+    "standardized_assets_path": "public/resources/stickers/standardized/{pack_id}/"
+  }
+}
