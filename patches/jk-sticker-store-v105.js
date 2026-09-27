@@ -3,12 +3,13 @@ const q=(s,r=document)=>r?.querySelector?.(s)||null;
 const qa=(s,r=document)=>r?.querySelectorAll?[...r.querySelectorAll(s)]:[];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const LABELS={cute:'น่ารัก',pets:'สัตว์เลี้ยง',reptile:'สัตว์จิ๋ว',love:'ความรัก',dating:'จีบ/คุย',feelings:'อารมณ์',daily:'ทุกวัน',lifestyle:'ไลฟ์สไตล์',work:'งาน',nerd:'เนิร์ด',gaming:'เกม',men:'ผู้ชาย',women:'ผู้หญิง',women_mischief:'สาวเจ้าเล่ห์',pride:'Pride',couple:'คู่รัก'};
-let overlay=null,catalog=[],query='',category='',detailPackId='',oldOverflow='';
+const PAGE_SIZE=12;
+let overlay=null,catalog=[],query='',category='',detailPackId='',oldOverflow='',browseLimit=PAGE_SIZE;
 
 const api=()=>window.JKStickerV77||null;
 const isOwned=p=>!!(p&&(Number(p.amount_minor||0)===0||p.owned||api()?.isOwned?.(p)));
 const price=p=>{const n=Number(p?.amount_minor||0);return n===0?'ฟรี':(n/100).toLocaleString('th-TH')+' บาท'};
-const art=(i,cls='')=>api()?.artMarkup?.(i?.sticker_key,cls)||'<span class="jk105-fallback">JK</span>';
+const art=(i,cls='')=>api()?.lazyArtMarkup?.(i?.sticker_key,cls)||api()?.artMarkup?.(i?.sticker_key,cls)||'<span class="jk105-fallback">JK</span>';
 function paymentState(){
   const a=api();
   const ps=a?.paymentStatus || {};
@@ -77,7 +78,7 @@ async function restoreOwnership(){
   try{
     const fresh=await a.loadCatalog(true);
     catalog=Array.isArray(fresh)?fresh:await a.getCatalog();
-    query='';category='';
+    query='';category='';browseLimit=PAGE_SIZE;
     renderBrowse();
     const owned=catalog.filter(isOwned).length;
     const status=q('#jk105RestoreStatus',overlay);
@@ -106,6 +107,8 @@ function renderBrowse(){
   const body=q('.jk105-body',overlay);
   const cats=[...new Set(catalog.map(p=>p.category).filter(Boolean))];
   const rows=filtered();
+  const shown=rows.slice(0,browseLimit);
+  const remaining=Math.max(0,rows.length-shown.length);
   body.innerHTML=
     '<section class="jk105-hero"><small>JK ORIGINAL STICKERS</small><h2>สติ๊กเกอร์ที่อยากหยิบมาใช้จริง</h2><p>'+catalog.length+' ชุด · '+catalog.reduce((n,p)=>n+(p.items?.length||0),0).toLocaleString('th-TH')+' ภาพ · ทุกชุดมีข้อความไทย</p></section>'+
     '<section class="jk105-account"><div><b>สิทธิ์ผูกกับบัญชี</b><span>เปลี่ยนเครื่องหรือลงแอปใหม่ แพ็กที่ซื้อแล้วกู้คืนได้</span><small id="jk105RestoreStatus" role="status"></small></div><button type="button" id="jk105Restore">กู้คืนการซื้อ</button></section>'+
@@ -113,12 +116,15 @@ function renderBrowse(){
     '<div class="jk105-cats"><button type="button" data-jk105-cat="" class="'+(!category?'active':'')+'">ทั้งหมด</button>'+
       cats.map(c=>'<button type="button" data-jk105-cat="'+esc(c)+'" class="'+(category===c?'active':'')+'">'+esc(LABELS[c]||c)+'</button>').join('')+
     '</div>'+
-    '<div class="jk105-resultbar"><b>'+rows.length+' ชุด</b><span>แตะเพื่อดูครบ 24 ภาพ</span></div>'+
-    (rows.length?'<div class="jk105-grid">'+rows.map(card).join('')+'</div>':'<div class="jk105-empty">ยังไม่พบชุดที่ตรงกับคำค้น</div>');
+    '<div class="jk105-resultbar"><b>'+rows.length+' ชุด</b><span>กำลังแสดง '+shown.length+' · แตะเพื่อดูครบ 24 ภาพ</span></div>'+
+    (shown.length?'<div class="jk105-grid">'+shown.map(card).join('')+'</div>':'<div class="jk105-empty">ยังไม่พบชุดที่ตรงกับคำค้น</div>')+
+    (remaining?'<button type="button" class="jk105-more" id="jk105More">ดูเพิ่มอีก '+Math.min(PAGE_SIZE,remaining)+' ชุด</button>':'');
   q('#jk105Restore',body)?.addEventListener('click',restoreOwnership);
-  q('#jk105Search',body)?.addEventListener('input',e=>{query=e.target.value;renderBrowse();const i=q('#jk105Search',overlay);i?.focus();if(i)i.setSelectionRange(i.value.length,i.value.length)});
-  qa('[data-jk105-cat]',body).forEach(b=>b.onclick=()=>{category=b.dataset.jk105Cat||'';renderBrowse()});
+  q('#jk105Search',body)?.addEventListener('input',e=>{query=e.target.value;browseLimit=PAGE_SIZE;renderBrowse();const i=q('#jk105Search',overlay);i?.focus();if(i)i.setSelectionRange(i.value.length,i.value.length)});
+  qa('[data-jk105-cat]',body).forEach(b=>b.onclick=()=>{category=b.dataset.jk105Cat||'';browseLimit=PAGE_SIZE;renderBrowse()});
+  q('#jk105More',body)?.addEventListener('click',()=>{browseLimit+=PAGE_SIZE;renderBrowse()});
   qa('[data-jk105-pack]',body).forEach(b=>b.onclick=()=>renderDetail(b.dataset.jk105Pack));
+  window.JKStickerPerformanceV107?.scan?.(body);
 }
 function renderDetail(packId){
   if(!overlay)return;
@@ -141,6 +147,7 @@ function renderDetail(packId){
   if(use)use.onclick=async()=>{close();await window.JKStickerPickerV104?.openMinePack?.(p.pack_id)};
   const buy=q('#jk105Buy',body);
   if(buy&&!buy.disabled)buy.onclick=()=>startPackPurchase(p);
+  window.JKStickerPerformanceV107?.scan?.(body);
 }
 function shell(){
   const el=document.createElement('div');el.className='jk105-overlay';
@@ -158,7 +165,7 @@ async function open(){
   try{
     catalog=await a.getCatalog();
     if(!Array.isArray(catalog)||!catalog.length)return;
-    query='';category='';detailPackId='';
+    query='';category='';detailPackId='';browseLimit=PAGE_SIZE;
     oldOverflow=document.documentElement.style.overflow;
     document.documentElement.style.overflow='hidden';
     overlay=shell();document.addEventListener('keydown',onKey);renderBrowse();
