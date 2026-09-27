@@ -144,7 +144,7 @@ function intro(){
 }
 
 function run(){
-  document.documentElement.dataset.jkRuntime='v95';forceNav();badge();home();chat();profile();intro();
+  document.documentElement.dataset.jkRuntime='v95';badge();home();chat();profile();intro();
 }
 let scheduled=false;const go=()=>{if(scheduled)return;scheduled=true;queueMicrotask(()=>{scheduled=false;run()})};
 new MutationObserver(go).observe(document.documentElement,{childList:true,subtree:true});
