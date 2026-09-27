@@ -245,6 +245,18 @@
     return '<img class="jk-sticker-image-v62 jk-v77-art ' + attr(cls) + '" src="' + attr(src) + '" alt="' + attr(found.item.caption_th) + '" data-sticker-key="' + attr(found.item.sticker_key) + '" data-sticker-pack="' + attr(found.pack?.pack_id || '') + '" loading="lazy" decoding="async">';
   }
 
+  function lazyArtMarkup(key, cls = '') {
+    const found = itemByKey.get(String(key));
+    if (!found) return '';
+    const transparent='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+    return '<img class="jk-sticker-image-v62 jk-v77-art jk-v77-lazy-art ' + attr(cls) + '" src="' + transparent + '" alt="' + attr(found.item.caption_th) + '" data-jk-sticker-lazy-key="' + attr(found.item.sticker_key) + '" data-sticker-key="' + attr(found.item.sticker_key) + '" data-sticker-pack="' + attr(found.pack?.pack_id || '') + '" loading="lazy" decoding="async">';
+  }
+
+  function assetUrlByKey(key) {
+    const found=itemByKey.get(String(key));
+    return found ? renderRuntime(found.item) : '';
+  }
+
   function packOwned(pack) {
     if (!pack) return false;
     if (Number(pack.amount_minor || 0) === 0) return true;
@@ -461,7 +473,9 @@
     openStore,
     openTray,
     openPack,
-    artMarkup
+    artMarkup,
+    lazyArtMarkup,
+    assetUrlByKey
   };
 
   window.JKReviewShopV61 = openStore;
