@@ -45,22 +45,19 @@ jobs:
 
           s = re.sub(r'<iframe[^>]+(?:netlify|\.netlify)[^>]*>.*?</iframe>', '', s, flags=re.I|re.S)
           s = re.sub(r'<script[^>]+src=["\'][^"\']*(?:netlify|\.netlify)[^"\']*["\'][^>]*>.*?</script>', '', s, flags=re.I|re.S)
-          s = re.sub(r'<script[^>]+src=["\'][^"\']*jk-live-ux-v91\.js[^"\']*["\'][^>]*>\s*</script>', '', s, flags=re.I|re.S)
-          s = re.sub(r'<script[^>]+src=["\'][^"\']*jk-prod-ui-v93\.js[^"\']*["\'][^>]*>\s*</script>', '', s, flags=re.I|re.S)
 
           head_assets = [
               ('sticker-shop-v62.css', '<link rel="stylesheet" href="./patches/sticker-shop-v62.css">'),
               ('sticker-v77.css', '<link rel="stylesheet" href="./patches/sticker-v77.css">'),
               ('jk-live-ux-v91.css', '<link rel="stylesheet" href="./patches/jk-live-ux-v91.css">'),
               ('jk-prod-hybrid-v92.css', '<link rel="stylesheet" href="./patches/jk-prod-hybrid-v92.css">'),
-              ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=96.0">'),
-              ('jk-icon-system-v95.css', '<link rel="stylesheet" href="./patches/jk-icon-system-v95.css?v=95.2">'),
+              ('jk-prod-ui-v93.css', '<link rel="stylesheet" href="./patches/jk-prod-ui-v93.css?v=93.4">'),
           ]
           body_assets = [
               ('sticker-v77.js', '<script src="./patches/sticker-v77.js"></script>'),
               ('jk-recovery-v90.js', '<script src="./patches/jk-recovery-v90.js"></script>'),
-              ('jk-nav-v96.js', '<script src="./patches/jk-nav-v96.js?v=96.1"></script>'),
-              ('jk-icon-system-v95.js', '<script src="./patches/jk-icon-system-v95.js?v=95.2"></script>'),
+              ('jk-live-ux-v91.js', '<script src="./patches/jk-live-ux-v91.js"></script>'),
+              ('jk-prod-ui-v93.js', '<script src="./patches/jk-prod-ui-v93.js?v=93.4"></script>'),
           ]
 
           for key, tag in head_assets:
@@ -70,13 +67,6 @@ jobs:
           for key, tag in body_assets:
               if key not in s:
                   s = s.replace('</body>', tag + '\n</body>')
-
-          runtime_css = Path('site/patches/jk-runtime-v95.css').read_text(encoding='utf-8')
-          runtime_js = Path('site/patches/jk-runtime-v95.js').read_text(encoding='utf-8')
-          s = re.sub(r'<style id="jk-runtime-v95">.*?</style>', '', s, flags=re.I|re.S)
-          s = re.sub(r'<script id="jk-runtime-v95">.*?</script>', '', s, flags=re.I|re.S)
-          s = s.replace('</head>', '<style id="jk-runtime-v95">' + runtime_css + '</style>\n</head>')
-          s = s.replace('</body>', '<script id="jk-runtime-v95">' + runtime_js.replace('</script>', '<\\/script>') + '</script>\n</body>')
 
           p.write_text(s, encoding='utf-8')
           PY
