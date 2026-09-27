@@ -164,3 +164,106 @@ html[data-jk-ui="v93"] .bottom-nav.jk-v17-nav .nav-btn.active{color:var(--jk93-r
   html[data-jk-ui="v93"] #page[data-route="discover"] .jk-city-hero-copy h1{font-size:24px!important}
   html[data-jk-ui="v93"] #page[data-route="discover"] .jk-random-mode-v27 b{font-size:12px!important}
 }
+
+
+/* PROFILE */
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-me-hero-v25{
+  display:grid!important;grid-template-columns:92px 1fr 42px!important;gap:14px!important;align-items:center!important;
+  background:#fff!important;border:1px solid var(--jk93-line)!important;border-radius:26px!important;
+  padding:16px!important;box-shadow:var(--jk93-shadow)!important;margin-bottom:14px!important
+}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-me-avatar-v25{
+  width:92px!important;height:106px!important;border-radius:22px!important;overflow:hidden!important;
+  border:0!important;background:#f4e8ec!important;padding:0!important
+}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-me-avatar-v25 img,
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-me-avatar-v25 .photo-fallback{width:100%!important;height:100%!important;object-fit:cover!important}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-me-hero-v25 h1{font-size:25px!important;margin:0 0 4px!important;letter-spacing:-.35px!important}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-me-hero-v25 p{font-size:12px!important;line-height:1.55!important;color:var(--jk93-muted)!important;margin:0!important}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-edit-icon-btn{
+  width:42px!important;height:42px!important;border-radius:14px!important;border:1px solid var(--jk93-line)!important;background:#fff!important
+}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-profile-section-v25{
+  background:#fff!important;border:1px solid var(--jk93-line)!important;border-radius:22px!important;
+  padding:16px!important;margin:10px 0!important;box-shadow:0 5px 16px rgba(60,28,38,.035)!important
+}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-section-title-v25 h3{font-size:17px!important;margin:0 0 3px!important}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-section-title-v25 p{font-size:11px!important;color:var(--jk93-muted)!important;line-height:1.45!important}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-now-card-v25,
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-before-card-v25,
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-pref-card-v26,
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-about-card-v25{
+  border-radius:17px!important;border:1px solid #f0e5e8!important;background:#fcfafb!important;box-shadow:none!important
+}
+html[data-jk-ui="v93"] #page[data-route="me"] .jk-before-card-v25 .quote{font-size:15px!important;line-height:1.55!important;color:#4a3039!important}
+html[data-jk-ui="v93"] #page[data-route="me"] .menu-list.v17-menu{
+  background:#fff!important;border:1px solid var(--jk93-line)!important;border-radius:22px!important;overflow:hidden!important;
+  box-shadow:var(--jk93-shadow)!important
+}
+html[data-jk-ui="v93"] #page[data-route="me"] .menu-list.v17-menu .menu-item{border-radius:0!important}
+
+/* OTHER USER PROFILE */
+html[data-jk-ui="v93"] .jk-profile-preview{
+  border-radius:24px!important;background:#fff!important
+}
+html[data-jk-ui="v93"] .jk-profile-preview>img,
+html[data-jk-ui="v93"] .jk-profile-preview>.photo-fallback{
+  border-radius:22px!important;aspect-ratio:4/5!important;object-fit:cover!important
+}
+html[data-jk-ui="v93"] .jk-profile-actions .btn.primary{
+  min-height:50px!important;border-radius:16px!important;background:var(--jk93-red)!important
+}
+
+/* CHAT LIST */
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chatlist-v30{padding-bottom:10px!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-page-head{
+  padding:2px 0 12px!important;background:transparent!important;border:0!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-page-head small{display:none!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-page-head h1{margin:0!important;font-size:27px!important;letter-spacing:-.4px!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-page-head p{font-size:12px!important;line-height:1.5!important;color:var(--jk93-muted)!important;max-width:380px!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chat-search-v30{
+  min-height:48px!important;border-radius:16px!important;border:1px solid var(--jk93-line)!important;background:#fff!important;
+  box-shadow:none!important;padding:0 13px!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chat-search-v30 input{font-size:15px!important;color:var(--jk93-ink)!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chat-filter-v30{gap:8px!important;margin:10px 0 18px!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chat-filter-v30 button{
+  border:1px solid var(--jk93-line)!important;background:#fff!important;border-radius:999px!important;min-height:38px!important;padding:0 14px!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chat-filter-v30 button.active{background:#251b1f!important;color:#fff!important;border-color:#251b1f!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .match-orbits.chat-orbits{
+  display:flex!important;gap:10px!important;overflow:auto!important;padding:3px 1px 10px!important;scrollbar-width:none
+}
+html[data-jk-ui="v93"] #page[data-route="chat"] .match-orbits.chat-orbits::-webkit-scrollbar{display:none}
+html[data-jk-ui="v93"] #page[data-route="chat"] .request-stack{
+  background:#fff5f7!important;border:1px solid #f3dce2!important;border-radius:22px!important;padding:8px!important;margin-bottom:18px!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-chat-list{
+  background:#fff!important;border:1px solid var(--jk93-line)!important;border-radius:22px!important;overflow:hidden!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chat-row-v30{
+  display:grid!important;grid-template-columns:1fr 42px!important;align-items:center!important;border-bottom:1px solid #f0e7e9!important;background:#fff!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chat-row-v30:last-child{border-bottom:0!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-chat-row{
+  min-height:72px!important;padding:10px 12px!important;background:#fff!important;border:0!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-chat-row .avatar{width:48px!important;height:48px!important;border-radius:16px!important;overflow:hidden!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-chat-row b{font-size:15px!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .v17-chat-row small{font-size:11px!important;color:var(--jk93-muted)!important}
+html[data-jk-ui="v93"] #page[data-route="chat"] .jk-chat-fav-v30{
+  width:36px!important;height:36px!important;border-radius:12px!important;border:0!important;background:#faf4f6!important
+}
+
+/* CHAT DETAIL */
+html[data-jk-ui="v93"] #page[data-route="chat-detail"] .chat-head{
+  background:rgba(255,255,255,.98)!important;border-bottom:1px solid var(--jk93-line)!important;padding:10px 12px!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat-detail"] .chat-head .avatar{width:44px!important;height:44px!important;border-radius:14px!important;overflow:hidden!important}
+html[data-jk-ui="v93"] #page[data-route="chat-detail"] .message-list{padding:16px 12px 12px!important;gap:8px!important}
+html[data-jk-ui="v93"] #page[data-route="chat-detail"] .bubble-wrap .bubble{
+  border-radius:18px!important;padding:10px 13px!important;line-height:1.45!important;box-shadow:none!important
+}
+html[data-jk-ui="v93"] #page[data-route="chat-detail"] .bubble-wrap.them .bubble{background:#fff!important;border:1px solid var(--jk93-line)!important}
+html[data-jk-ui="v93"] #page[data-route="chat-detail"] .bubble-wrap.me .bubble{background:var(--jk93-red)!important;color:#fff!important}
