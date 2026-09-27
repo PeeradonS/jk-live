@@ -103,6 +103,12 @@ function filtered(){
     if(!term)return true;
     const hay=[p.title,LABELS[p.category]||p.category,...(p.items||[]).map(i=>i.caption_th)].join(' ').toLocaleLowerCase('th');
     return hay.includes(term);
+  }).sort((a,b)=>{
+    const ready=Number(saleReady(b))-Number(saleReady(a));
+    if(ready)return ready;
+    const own=Number(isOwned(b))-Number(isOwned(a));
+    if(own)return own;
+    return String(a.title||'').localeCompare(String(b.title||''),'th');
   });
 }
 function renderBrowse(){
@@ -111,10 +117,12 @@ function renderBrowse(){
   const body=q('.jk105-body',overlay);
   const cats=[...new Set(catalog.map(p=>p.category).filter(Boolean))];
   const rows=filtered();
+  const readyCount=catalog.filter(saleReady).length;
+  const pendingCount=Math.max(0,catalog.length-readyCount);
   const shown=rows.slice(0,browseLimit);
   const remaining=Math.max(0,rows.length-shown.length);
   body.innerHTML=
-    '<section class="jk105-hero"><small>JK ORIGINAL STICKERS</small><h2>สติ๊กเกอร์ที่อยากหยิบมาใช้จริง</h2><p>'+catalog.length+' ชุด · '+catalog.reduce((n,p)=>n+(p.items?.length||0),0).toLocaleString('th-TH')+' ภาพ · ทุกชุดมีข้อความไทย</p></section>'+
+    '<section class="jk105-hero"><small>JK ORIGINAL STICKERS</small><h2>สติ๊กเกอร์ที่อยากหยิบมาใช้จริง</h2><p>พร้อมขายจริง '+readyCount+' ชุด · กำลังอัปเกรดภาพ '+pendingCount+' ชุด · '+catalog.reduce((n,p)=>n+(p.items?.length||0),0).toLocaleString('th-TH')+' ภาพใน catalog</p></section>'+
     '<section class="jk105-account"><div><b>สิทธิ์ผูกกับบัญชี</b><span>เปลี่ยนเครื่องหรือลงแอปใหม่ แพ็กที่ซื้อแล้วกู้คืนได้</span><small id="jk105RestoreStatus" role="status"></small></div><button type="button" id="jk105Restore">กู้คืนการซื้อ</button></section>'+
     '<label class="jk105-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="jk105Search" type="search" inputmode="search" placeholder="ค้นหา เช่น ฝันดี แมว เนิร์ด…" value="'+esc(query)+'"></label>'+
     '<div class="jk105-cats"><button type="button" data-jk105-cat="" class="'+(!category?'active':'')+'">ทั้งหมด</button>'+
