@@ -179,7 +179,8 @@ const QA_PARAMS=new URLSearchParams(location.search);
 const QA=QA_PARAMS.get('storeQaStep6')==='1';
 const QA7=QA_PARAMS.get('storeQaStep7')==='1';
 const QA8=QA_PARAMS.get('storeQaStep8')==='1';
-let qaDone=false,qaTries=0,qa7Done=false,qa8Done=false;
+const QA8OFF=QA_PARAMS.get('storeQaStep8Off')==='1';
+let qaDone=false,qaTries=0,qa7Done=false,qa8Done=false,qa8OffDone=false;
 function qaBadge(text,pass=null){
   let badge=q('#jk105QaStatus');
   if(!badge){
@@ -289,11 +290,43 @@ async function runStep8Qa(){
     qaBadge('JK STICKER STEP 8 · FAIL · '+String(err?.message||err),false);
   }
 }
+async function runStep8OffQa(){
+  if(!QA8OFF||qa8OffDone)return;
+  const a=api();
+  if(!a?.getCatalog)return setTimeout(runStep8OffQa,250);
+  qa8OffDone=true;
+  try{
+    catalog=await a.getCatalog();
+    if(!overlay){
+      oldOverflow=document.documentElement.style.overflow;
+      document.documentElement.style.overflow='hidden';
+      overlay=shell();document.addEventListener('keydown',onKey);
+    }
+    const paid=catalog.find(p=>Number(p.amount_minor||0)>0&&!isOwned(p));
+    if(!paid)throw new Error('no_unowned_paid_pack');
+    renderDetail(paid.pack_id);
+    const btn=q('#jk105Buy',overlay);
+    const ready=paymentState().ready;
+    const disabled=!!btn&&btn.disabled;
+    const honestText=String(btn?.textContent||'').includes('ยังไม่เปิดชำระเงินจริง') &&
+      String(q('#jk105PaymentStatus',overlay)?.textContent||'').includes('ระบบจะไม่จำลองว่าสำเร็จ');
+    const callCount=Number(window.__JK_QA_PURCHASE_CALLS||0);
+    const pass=!ready&&disabled&&honestText&&callCount===0&&!isOwned(paid);
+    window.JK_STICKER_STORE_V105_STEP8_OFF_QA={pass,ready,disabled,honestText,callCount,owned:isOwned(paid)};
+    qaBadge(pass
+      ? 'JK STICKER STEP 8 OFF · PASS · disabled + honest state'
+      : 'JK STICKER STEP 8 OFF · FAIL · ready='+ready+' disabled='+disabled+' honest='+honestText+' calls='+callCount+' owned='+isOwned(paid),
+      pass);
+  }catch(err){
+    qaBadge('JK STICKER STEP 8 OFF · FAIL · '+String(err?.message||err),false);
+  }
+}
 if(QA)qaBadge('JK STICKER STEP 6 · CHECKING');
 if(QA7)qaBadge('JK STICKER STEP 7 · CHECKING');
 if(QA8)qaBadge('JK STICKER STEP 8 · CHECKING');
-document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{runQa();runStep7Qa();runStep8Qa()},120));
-setTimeout(()=>{runQa();runStep7Qa();runStep8Qa()},180);
+if(QA8OFF)qaBadge('JK STICKER STEP 8 OFF · CHECKING');
+document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{runQa();runStep7Qa();runStep8Qa();runStep8OffQa()},120));
+setTimeout(()=>{runQa();runStep7Qa();runStep8Qa();runStep8OffQa()},180);
 document.addEventListener('click',e=>{
   const tab=e.target.closest?.('[data-jk104-tab="store"]');
   if(!tab)return;
@@ -302,5 +335,5 @@ document.addEventListener('click',e=>{
   window.JKStickerPickerV104?.close?.();
   open();
 },true);
-window.JKStickerStoreV105={open,close,renderBrowse,renderDetail,restoreOwnership,startPackPurchase,runQa,runStep7Qa,runStep8Qa};
+window.JKStickerStoreV105={open,close,renderBrowse,renderDetail,restoreOwnership,startPackPurchase,runQa,runStep7Qa,runStep8Qa,runStep8OffQa};
 })();
