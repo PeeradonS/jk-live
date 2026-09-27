@@ -242,7 +242,7 @@
     if (!found) return '';
     const src = renderRuntime(found.item);
     if (!src) return '';
-    return '<img class="jk-sticker-image-v62 jk-v77-art ' + attr(cls) + '" src="' + attr(src) + '" alt="' + attr(found.item.caption_th) + '" loading="lazy" decoding="async">';
+    return '<img class="jk-sticker-image-v62 jk-v77-art ' + attr(cls) + '" src="' + attr(src) + '" alt="' + attr(found.item.caption_th) + '" data-sticker-key="' + attr(found.item.sticker_key) + '" data-sticker-pack="' + attr(found.pack?.pack_id || '') + '" loading="lazy" decoding="async">';
   }
 
   function packOwned(pack) {
