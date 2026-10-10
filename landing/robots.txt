@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://peeradons.github.io/jk-live/landing/sitemap.xml

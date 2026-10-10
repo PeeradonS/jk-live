@@ -122,6 +122,13 @@ jobs:
           PY
           touch site/.nojekyll
 
+      - name: Publish isolated JERKAN landing
+        run: |
+          test -f landing/index.html
+          mkdir -p site/landing
+          cp -R landing/. site/landing/
+          rm -f site/landing/_headers site/landing/netlify.toml
+
       - name: Browser QA Sticker Store v105
         run: |
           CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
